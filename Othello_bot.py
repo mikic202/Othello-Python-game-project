@@ -3,6 +3,17 @@ from Othello_consts import possible_value, first_colour, second_colour
 
 
 class BOT:
+    """
+        class BOT. Contains atributes:
+            param _colour: informs what colour is playing
+            type _colour: str
+
+            param _board: contains Board object with curent board
+            type _board: Board
+
+            param _weights: cotains information about weights of algoritm
+            type _weights: list
+    """
     def __init__(self, board: Board, colour) -> None:
         self._colour = colour
         self._board = board
@@ -12,15 +23,28 @@ class BOT:
             self._weights = [-2, 0, 2, 3, 2, 3, 2]
 
     def board(self):
+        """
+        Returns _board param
+        """
         return self._board
 
     def colour(self):
+        """
+        Returns _colour param
+        """
         return self._colour
 
     def weights(self):
+        """
+        returns _weights param
+        """
         return self._weights
 
     def evaluate_move(self, board):
+        """
+        function evaluating moves based on starting board,
+        inputed board and weights
+        """
         play_value = 0
         previous_board = self.board()
         size_x, size_y = board.size()
@@ -51,10 +75,17 @@ class BOT:
         return play_value
 
     def chose_move(self, board):
+        """
+        Function that returns space tahat was chosen by the algoritm
+        as the one with the best outcome out of possible spaces
+        """
         best_eval, space = self._min_max_func(board, 3, -float('inf'), float('inf'), True, self.colour(), None)
         return space
 
     def _min_max_func(self, board: Board, depth, max_move, min_move, is_maximasing, col, space_played):
+        """
+        internal function used for minmax algoritm with alfa beta pruning
+        """
         min_space = None
         max_space = None
         new_board = Board(board.size())
@@ -81,7 +112,7 @@ class BOT:
                         self.change_spaces(col, line, spcae_num)
                     test_board.reset_possible()
                     new_col = self._color_switch(col)
-                    evaluated, eval_space = self._min_max_func(test_board, depth-1, max_move, min_move, False, new_col, space)
+                    evaluated, scor = self._min_max_func(test_board, depth-1, max_move, min_move, False, new_col, space)
                     if max_eval < evaluated:
                         max_eval = evaluated
                         max_move = evaluated
@@ -104,7 +135,7 @@ class BOT:
                         self.change_spaces(col, line, spcae_num)
                     test_board.reset_possible()
                     new_col = self._color_switch(col)
-                    evaluated, eval_space = self._min_max_func(test_board, depth-1, max_move, min_move, True, new_col, space)
+                    evaluated, scor = self._min_max_func(test_board, depth-1, max_move, min_move, True, new_col, space)
                     if min_eval > evaluated:
                         min_eval = evaluated
                         min_move = evaluated
@@ -114,6 +145,9 @@ class BOT:
             return min_eval, min_space
 
     def _count_spaces_played(self, board: Board):
+        """
+        returns amount of spaces that already have pices on them
+        """
         played = 0
         for space in board.board():
             if space.value() == first_colour or space.value() == second_colour:
@@ -121,12 +155,20 @@ class BOT:
         return played
 
     def _color_switch(self, color):
+        """
+        internal function that switches colour to opposite
+        """
         if color == first_colour:
             return second_colour
         else:
             return first_colour
 
     def change_spaces(self, playing, line, positions):
+        """
+        Function that changes spaces that sholuld be changed in result of playing space
+        Same function as in main.py but couldn't be imported from that file dou to circular
+        character of import
+        """
         if positions is None:
             return
         elif positions[0] is None:
