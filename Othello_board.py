@@ -59,6 +59,9 @@ class Board:
         self._board[self._size_x*(index_y-1)+index_x-2].set_value(new_value)
 
     def _size_check(self, size):
+        """
+        internal function that checks if size is odd and brtween 8 and 30
+        """
         size_x, size_y = size
         if size_x < 8 or size_x > 30 or size_x % 2 != 0:
             raise IncorectSizeError('x')
@@ -66,6 +69,9 @@ class Board:
             raise IncorectSizeError('y')
 
     def _create_board(self, size):
+        """
+        internal functino that creates starting board
+        """
         size_x, size_y = size
         board = list()
         board = [Space((index_x, index_y), empty_value, size)for index_y in range(size_y) for index_x in range(size_x)]
@@ -75,13 +81,20 @@ class Board:
         self._assign_starting_point(size)
 
     def _assign_starting_point(self, size):
+        """
+        internal function that assigns four starting pices
+        """
         size_x, size_y = size
         self._board[size_x*int(size_y/2-1)+size_x//2-1].set_value(second_colour)
         self._board[size_x*int(size_y/2-1)+size_x//2].set_value(first_colour)
         self._board[size_x*int(size_y/2)+size_x//2-1].set_value(first_colour)
         self._board[size_x*int(size_y/2)+size_x//2].set_value(second_colour)
 
-    def find_possible_spaces(self, playing):
+    def _find_possible_spaces(self, playing):
+        """
+        internal function that checks if there is pices of another colour around
+        studied pice
+        """
         if playing == first_colour:
             looking = second_colour
         else:
@@ -95,7 +108,10 @@ class Board:
                 space.set_value(possible_value)
 
     def find_plays(self, playing):
-        self.find_possible_spaces(playing)
+        """
+        function that looks for spaces wher piece of colour that is playing can be put
+        """
+        self._find_possible_spaces(playing)
         possible_plays = dict()
         space_line_plays = dict()
         if playing == first_colour:
@@ -146,6 +162,11 @@ class Board:
         return space_line_plays, possible_plays
 
     def _diagonal_line_positive(self, space_pos_in_list):
+        """
+        internal function that creates list of spaces that are in diagonal line
+        going form lower left corner to upper right corner and throught studied space
+
+        """
         part_above = self._board[:space_pos_in_list+1]
         part_belov = self._board[space_pos_in_list:]
         part_above.reverse()
@@ -164,6 +185,10 @@ class Board:
         return self._check_diagonal(diagonal_line)
 
     def _diagonal_line_negative(self, space_pos_in_list):
+        """
+        internal function that creates list of spaces that are in diagonal line
+        going form upper left corner to lower right corner and throught studied space
+        """
         part_above = self._board[:space_pos_in_list+1]
         part_belov = self._board[space_pos_in_list:]
         part_above.reverse()
@@ -181,12 +206,24 @@ class Board:
         return final_line
 
     def _vertical_line(self, row_num):
+        """
+        internal function that creates list of spaces that are in the
+        same row as studied space
+        """
         return self._board[row_num::self._size_x]
 
     def _horizontal_line(self, line_num):
+        """
+        internal function that creates list of spaces that are
+        in the same line as studied space
+        """
         return self._board[line_num*self._size_x:(line_num+1)*self._size_x]
 
     def _check_diagonal(self, space_list):
+        """
+        internal function that checks if there are spaces in list which one of positions is
+        different from correct ones by over one
+        """
         final_line = None
         condition = 1
         for index in range(len(space_list)):
@@ -199,6 +236,9 @@ class Board:
         return final_line
 
     def _check_line_for_series_of_spaces(self, line, looking, playing, p_pos):
+        """
+        internal function that serches for plays that will change at least one pice
+        """
         line = self._split_line(line, p_pos)
         result = list()
         line[0].reverse()
@@ -221,22 +261,27 @@ class Board:
         return result
 
     def _split_line(self, line, p_position):
+        """
+        internal function that splits line into two pices,
+        without p_position element
+        """
         return line[:p_position], line[p_position+1:]
 
     def _check_where_to_play(self, where_to_play):
+        """
+        internal function that checks if all elements in list are None
+        """
         if all(play is None for play in where_to_play):
             return None
         else:
             return where_to_play
 
     def reset_possible(self):
+        """
+        function that resets all spaces which have possible value yo empty value
+        """
         for space in self._board:
             space.reset_if_possible()
 
     def _check_if_all_plays_None(self, plays_list):
         return all(play is None for play in plays_list)
-
-
-if __name__ == '__main__':
-    board = Board((8, 8))
-    a = 1
