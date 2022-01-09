@@ -46,7 +46,7 @@ def test_board_find_posible_spaces_playing_white():
         '#', '#', 'p', 'p', 'p', '#', '#', '#',
         '#', '#', '#', '#', '#', '#', '#', '#',
         '#', '#', '#', '#', '#', '#', '#', '#']
-    board.find_possible_spaces('w')
+    board._find_possible_spaces('w')
     w = board.board_values()
     assert w == expected_board
 
@@ -62,7 +62,7 @@ def test_board_find_posible_spaces_playing_black():
         '#', '#', '#', 'p', 'p', 'p', '#', '#',
         '#', '#', '#', '#', '#', '#', '#', '#',
         '#', '#', '#', '#', '#', '#', '#', '#']
-    board.find_possible_spaces('b')
+    board._find_possible_spaces('b')
     b = board.board_values()
     assert b == expected_board
 
@@ -88,7 +88,7 @@ def test_board_find_bossible_spaces_complex_situation():
         '#', '#', '#', '#', 'b', '#', '#', '#',
         '#', '#', '#', '#', '#', '#', '#', '#']
     board.set_board_values(fake_board)
-    board.find_possible_spaces('b')
+    board._find_possible_spaces('b')
     b = board.board_values()
     assert b == expected_board
 
