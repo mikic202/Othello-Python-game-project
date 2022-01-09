@@ -1,5 +1,4 @@
 import pygame
-from pygame.draw import rect
 from Othello_board import Board
 from Othello_consts import possible_value, first_colour, second_colour
 from Othello_main import change_spaces
@@ -15,7 +14,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 background = (84, 166, 92)
 gray = (60, 60, 60)
-blue = (53, 168, 210)
+blue = (53, 168, 230)
 empty_space = pygame.image.load(os.path.join('Assets', 'Othello_space.png'))
 fps = 40
 menu_fps = 20
@@ -38,8 +37,7 @@ class OptionSpace(SpaceToPress):
 def main_graphic():
     option, size = game_start()
     first_function, second_function = function_choice(option)
-    # WIN = pygame.display.set_mode((start_width, start_height), pygame.RESIZABLE)
-    previous_win_size = (start_width, start_height)
+    WIN = pygame.display.set_mode((start_width, start_height+30))
     colour = first_colour
     run = True
     checked = False
@@ -48,10 +46,10 @@ def main_graphic():
     while run:
         clock.tick(fps)
         WIN.fill(black)
-        if pygame.display.get_surface().get_size() != previous_win_size:
-            draw_board(board)
-            pygame.display.update()
-            previous_win_size = pygame.display.get_surface().get_size()
+        # if pygame.display.get_surface().get_size() != previous_win_size:
+        #     draw_board(board)
+        #     pygame.display.update()
+        #     previous_win_size = pygame.display.get_surface().get_size()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -63,6 +61,7 @@ def main_graphic():
                 if possible_value not in board.board_values():
                     break
             possible_spaces = draw_board(board)
+            display_game_information(board, colour)
             pygame.display.update()
             checked = True
         mouse_press = pygame.mouse.get_pressed(3)[0]
@@ -72,6 +71,7 @@ def main_graphic():
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board)
             pygame.time.wait(delay)
+    WIN = pygame.display.set_mode((start_width, start_height+30))
     game_end(board)
     pygame.quit()
 
@@ -114,13 +114,14 @@ def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
     chosen_space = board.board()[space_position_in_list]
     for line, space_num in zip(line_dict[chosen_space], play_pos_dict[chosen_space]):
         change_spaces(colour, line, space_num)
+    del bot
     return change_colour(colour), False
 
 
 def draw_board(board: Board):
     width, height = pygame.display.get_surface().get_size()
     size_x, size_y = board.size()
-    space_size = min(width, height)//max(size_x, size_y)
+    space_size = min(width//size_x, (height-30)//size_y)
     circle_pos_x = (size_x//2-2, size_x//2+2)
     circle_pos_y = (size_y//2-2, size_y//2+2)
     empty_space_trans = pygame.transform.scale(empty_space, (space_size, space_size))
@@ -226,7 +227,6 @@ def button_colour_change(option):
 
 def game_end(board: Board):
     width, height = pygame.display.get_surface().get_size()
-    title_font.render('Othello', True, black)
     board_values = board.board_values()
     draw_board(board)
     white_spaces = 0
@@ -242,10 +242,10 @@ def game_end(board: Board):
         result = 'Black Won!'
     else:
         result = 'White Won!'
-    text_result = title_font.render(result, True, blue)
-    text_scores = title_font.render(f'Black: {black_spaces:3}  White: {white_spaces:3}', True, blue)
+    text_result = title_font.render(result, True, black)
+    text_scores = title_font.render(f'Black: {black_spaces:3}  White: {white_spaces:3}', True, black)
     WIN.blit(text_result, (width//2 - 16*len(result)/2, height//2))
-    WIN.blit(text_scores, (width//2 - 150, height//2-30))
+    WIN.blit(text_scores, (width//2 - 150, (height)//2-30))
     pygame.display.update()
     run = True
     while run:
@@ -255,17 +255,33 @@ def game_end(board: Board):
 
 
 def board_size_choice(keys_press, x_value, y_value):
-    if keys_press[pygame.K_LEFT] and y_value > 8:
-        y_value -= 1
-    if keys_press[pygame.K_RIGHT] and y_value < 30:
-        y_value += 1
-    if keys_press[pygame.K_DOWN] and x_value > 8:
+    if keys_press[pygame.K_LEFT] and x_value > 8:
         x_value -= 1
-    if keys_press[pygame.K_UP] and x_value < 30:
+    if keys_press[pygame.K_RIGHT] and x_value < 30:
         x_value += 1
+    if keys_press[pygame.K_DOWN] and y_value > 8:
+        y_value -= 1
+    if keys_press[pygame.K_UP] and y_value < 30:
+        y_value += 1
     return x_value, y_value
 
 
+def display_game_information(board: Board, colour):
+    width, height = pygame.display.get_surface().get_size()
+    black_spac = 0
+    white_spac = 0
+    for value in board.board_values():
+        if value == first_colour:
+            black_spac += 1
+        elif value == second_colour:
+            white_spac += 1
+    playing = f'{"White" if colour == "w" else "Black"}'
+    text_scores = font.render(f'Playing: {playing} Scores: Black: {black_spac:3<}  White: {white_spac:3<}', True, white)
+    WIN.blit(text_scores, (0, height-20))
+
+
 if __name__ == '__main__':
+    # display_game_information(Board((8, 8)))
     main_graphic()
     # game_start()
+    # game_end(Board((8, 8)))
