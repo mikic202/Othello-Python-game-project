@@ -1,12 +1,13 @@
 import pygame
+from pygame.draw import rect
 from Othello_board import Board
 from Othello_consts import possible_value, first_colour, second_colour
 from Othello_main import change_spaces
 from random import choice
 from Othello_bot import BOT
 import os
-width, height = 600, 600
-WIN = pygame.display.set_mode((width, height))
+start_width, start_height = 600, 600
+WIN = pygame.display.set_mode((start_width, start_height))
 pygame.display.set_caption("Othello")
 
 pygame.init()
@@ -37,6 +38,8 @@ class OptionSpace(SpaceToPress):
 def main_graphic():
     option, size = game_start()
     first_function, second_function = function_choice(option)
+    # WIN = pygame.display.set_mode((start_width, start_height), pygame.RESIZABLE)
+    previous_win_size = (start_width, start_height)
     colour = first_colour
     run = True
     checked = False
@@ -45,9 +48,13 @@ def main_graphic():
     while run:
         clock.tick(fps)
         WIN.fill(black)
+        if pygame.display.get_surface().get_size() != previous_win_size:
+            draw_board(board)
+            pygame.display.update()
+            previous_win_size = pygame.display.get_surface().get_size()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
+                pygame.quit()
         if not checked:
             line_dict, play_pos_dict = board.find_plays(colour)
             if possible_value not in board.board_values():
@@ -111,8 +118,9 @@ def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
 
 
 def draw_board(board: Board):
+    width, height = pygame.display.get_surface().get_size()
     size_x, size_y = board.size()
-    space_size = width//max(size_x, size_y)
+    space_size = min(width, height)//max(size_x, size_y)
     circle_pos_x = (size_x//2-2, size_x//2+2)
     circle_pos_y = (size_y//2-2, size_y//2+2)
     empty_space_trans = pygame.transform.scale(empty_space, (space_size, space_size))
@@ -168,7 +176,9 @@ def game_start():
     bvb_col = white
     run = True
     option = 0
+    width, height = pygame.display.get_surface().get_size()
     while run:
+        width, height = pygame.display.get_surface().get_size()
         clock.tick(menu_fps)
         WIN.fill(background)
         for event in pygame.event.get():
@@ -179,23 +189,14 @@ def game_start():
         text_size = font.render(f'Baord Size: X{x_value - x_value % 2:2}    Y{y_value - y_value % 2:2}', True, black)
         if pygame.mouse.get_pressed(3)[0]:
             if playervsplayer.rect.collidepoint(pygame.mouse.get_pos()):
-                pvp_col = gray
-                pvb_col = white
-                bvb_col = white
                 option = 1
             elif playervscomp.rect.collidepoint(pygame.mouse.get_pos()):
-                pvp_col = white
-                pvb_col = gray
-                bvb_col = white
                 option = 2
             elif compvscomp.rect.collidepoint(pygame.mouse.get_pos()):
-                pvp_col = white
-                pvb_col = white
-                bvb_col = gray
                 option = 3
             elif start_button.rect.collidepoint(pygame.mouse.get_pos()) and option != 0:
                 return option, (x_value - x_value % 2, y_value - y_value % 2)
-
+        pvp_col, pvb_col, bvb_col = button_colour_change(option)
         pygame.draw.rect(WIN, pvp_col, playervsplayer.rect)
         pygame.draw.rect(WIN, pvb_col, playervscomp.rect)
         pygame.draw.rect(WIN, bvb_col, compvscomp.rect)
@@ -210,7 +211,21 @@ def game_start():
     pygame.quit()
 
 
+def button_colour_change(option):
+    pvp_col = white
+    pvb_col = white
+    bvb_col = white
+    if option == 1:
+        pvp_col = gray
+    elif option == 2:
+        pvb_col = gray
+    elif option == 3:
+        bvb_col = gray
+    return pvp_col, pvb_col, bvb_col
+
+
 def game_end(board: Board):
+    width, height = pygame.display.get_surface().get_size()
     title_font.render('Othello', True, black)
     board_values = board.board_values()
     draw_board(board)
