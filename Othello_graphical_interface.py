@@ -92,6 +92,7 @@ def function_choice(option):
         return player_function, player_function
     if option == 2:
         colour_chosen = colour_choice()
+        pygame.time.wait(delay)
         if colour_chosen == first_colour:
             return player_function, computer_function
         else:
