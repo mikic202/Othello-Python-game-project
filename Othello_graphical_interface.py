@@ -5,6 +5,7 @@ from Othello_main import change_spaces
 from random import choice
 from Othello_bot import BOT
 import os
+from Othello_interface import calculate_result
 start_width, start_height = 600, 600
 WIN = pygame.display.set_mode((start_width, start_height))
 pygame.display.set_caption("Othello")
@@ -177,7 +178,6 @@ def game_start():
     bvb_col = white
     run = True
     option = 0
-    width, height = pygame.display.get_surface().get_size()
     while run:
         width, height = pygame.display.get_surface().get_size()
         clock.tick(menu_fps)
@@ -227,23 +227,10 @@ def button_colour_change(option):
 
 def game_end(board: Board):
     width, height = pygame.display.get_surface().get_size()
-    board_values = board.board_values()
     draw_board(board)
-    white_spaces = 0
-    black_spaces = 0
-    for value in board_values:
-        if value == first_colour:
-            black_spaces += 1
-        elif value == second_colour:
-            white_spaces += 1
-    if black_spaces == white_spaces:
-        result = 'Tie'
-    elif black_spaces > white_spaces:
-        result = 'Black Won!'
-    else:
-        result = 'White Won!'
+    score, result = calculate_result(board)
     text_result = title_font.render(result, True, black)
-    text_scores = title_font.render(f'Black: {black_spaces:3}  White: {white_spaces:3}', True, black)
+    text_scores = title_font.render(score, True, black)
     WIN.blit(text_result, (width//2 - 16*len(result)/2, height//2))
     WIN.blit(text_scores, (width//2 - 150, (height)//2-30))
     pygame.display.update()
