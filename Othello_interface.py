@@ -61,22 +61,28 @@ def players_choice(max_index, color):
 
 
 def display_result(board: Board):
+    display_board(board.board_values(), board.size())
+    with open('Game_board.txt', 'a')as file_handle:
+        write_result_to_file(board, file_handle)
+    score, result = calculate_result(board)
+    print(score+"\n"+result)
+
+
+def calculate_result(board: Board):
     black_spaces = white_spaces = 0
     for space in board.board_values():
         if space == first_colour:
             black_spaces += 1
         elif space == second_colour:
             white_spaces += 1
-    display_board(board.board_values(), board.size())
-    with open('Game_board.txt', 'a')as file_handle:
-        write_result_to_file(board, file_handle)
-    print(f'white: {white_spaces}  black: {black_spaces}\n')
+    score = f'white: {white_spaces:3}  black: {black_spaces:3}'
     if white_spaces > black_spaces:
-        print('White won!')
+        result = 'White won!'
     elif white_spaces < black_spaces:
-        print('Black won!')
+        result = 'Black won!'
     else:
-        print('Tie')
+        result = 'Tie'
+    return score, result
 
 
 def check_index(chosen, max_index):
