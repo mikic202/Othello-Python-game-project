@@ -12,25 +12,21 @@ def main():
         first_function = play
         second_function = play
         main_user_vs_user(pvp_board, first_function, second_function)
-        # main_pvp(pvp_board)
     elif chosen_game == 3:
         bvb_board = board
         first_function = computer_move
         second_function = computer_move
         main_user_vs_user(bvb_board, first_function, second_function)
-        # main_bvb(bvb_board)
     elif chosen_game == 2 and colour == first_colour:
         pvb_board = board
         first_function = play
         second_function = computer_move
         main_user_vs_user(pvb_board, first_function, second_function)
-        # main_pvb(pvb_board, color)
     elif chosen_game == 2 and colour == second_colour:
         bvp_board = board
         second_function = play
         first_function = computer_move
         main_user_vs_user(bvp_board, first_function, second_function)
-        # main_pvb(pvb_board, color)
     return
 
 
@@ -50,7 +46,6 @@ def play(board: Board, color, bot=None):
     for line, space_num in zip(line_dict[chosen_space], play_pos_dict[chosen_space]):
         change_spaces(color, line, space_num)
     board.reset_possible()
-    # display_board(board.board_values(), board.size())
 
 
 def change_spaces(playing, line, positions):
@@ -84,7 +79,6 @@ def computer_move(board: Board, color, bot):
     for line, space_num in zip(line_dict[chosen_space], play_pos_dict[chosen_space]):
         change_spaces(color, line, space_num)
     board.reset_possible()
-    # display_board(board.board_values(), board.size())
 
 
 def format_board_file(board: Board):
