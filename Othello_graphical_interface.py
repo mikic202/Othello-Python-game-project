@@ -38,19 +38,21 @@ class OptionSpace(SpaceToPress):
 def main_graphic():
     option, size = game_start()
     first_function, second_function = function_choice(option)
-    WIN = pygame.display.set_mode((start_width, start_height+30))
+    WIN = pygame.display.set_mode((start_width, start_height+30), pygame.RESIZABLE)
     colour = first_colour
     run = True
     checked = False
     clock = pygame.time.Clock()
     board = Board(size)
+    previous_win_size = pygame.display.get_surface().get_size()
     while run:
         clock.tick(fps)
         WIN.fill(black)
-        # if pygame.display.get_surface().get_size() != previous_win_size:
-        #     draw_board(board)
-        #     pygame.display.update()
-        #     previous_win_size = pygame.display.get_surface().get_size()
+        if pygame.display.get_surface().get_size() != previous_win_size:
+            possible_spaces = draw_board(board)
+            display_game_information(board, colour)
+            pygame.display.update()
+            previous_win_size = pygame.display.get_surface().get_size()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
