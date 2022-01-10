@@ -1,4 +1,5 @@
-from Othello_interface import TooManyIncorectTriesError, players_choice, start_interface, check_index
+from Othello_board import Board
+from Othello_interface import TooManyIncorectTriesError, players_choice, start_interface, check_index, calculate_result
 from io import StringIO
 import pytest
 
@@ -46,3 +47,23 @@ def test_check_index_corect():
 
 def test_check_index_incorect():
     assert check_index('p10', 4)
+
+
+def test_calculate_score_typical():
+    board = Board((8, 8))
+    board_to_calculate = [
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', 'b', '#', '#', '#', '#',
+        '#', '#', 'b', 'w', 'b', '#', '#', '#',
+        '#', '#', '#', 'b', 'w', '#', '#', '#',
+        '#', '#', '#', '#', 'b', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#']
+    board.set_board_values(board_to_calculate)
+    assert calculate_result(board) == ('white:   2  black:   5', 'Black won!')
+
+
+def test_calculate_score_tie():
+    board = Board((8, 8))
+    assert calculate_result(board) == ('white:   2  black:   2', 'Tie')
