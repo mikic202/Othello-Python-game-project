@@ -7,7 +7,8 @@ from Othello_bot import BOT
 import os
 from Othello_interface import calculate_result
 start_width, start_height = 600, 600
-WIN = pygame.display.set_mode((start_width, start_height))
+if __name__ == '__main__':
+    WIN = pygame.display.set_mode((start_width, start_height))
 pygame.display.set_caption("Othello")
 
 pygame.init()
