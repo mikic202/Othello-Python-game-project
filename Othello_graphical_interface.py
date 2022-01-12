@@ -76,6 +76,8 @@ def main_graphic():
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board)
             pygame.time.wait(delay)
     WIN = pygame.display.set_mode((start_width, start_height+30))
+    pygame.display.update()
+    pygame.time.wait(10)
     game_end(board)
     pygame.quit()
 
@@ -160,8 +162,6 @@ def set_values(space, space_size):
         WIN.blit(space_value_transform, (pos_x*space_size, pos_y*space_size))
         if space.value() == possible_value:
             return SpaceToPress((pos_x*space_size, pos_y*space_size), (space_size, space_size), space)
-    # if space.value() == possible_value:
-    #     return (pos_x*space_size, pos_y*space_size)
 
 
 def game_start():
@@ -172,10 +172,11 @@ def game_start():
     compvscomp_pos = (390, 300)
     start_pos = (210, 500)
     title_pos = (300, 100)
-    playervsplayer = OptionSpace(playervsplayer_pos, (150, 40))
-    playervscomp = OptionSpace(playervscomp_pos, (150, 40))
-    compvscomp = OptionSpace(compvscomp_pos, (150, 40))
-    start_button = OptionSpace(start_pos, (150, 40))
+    button_size = (150, 40)
+    playervsplayer = OptionSpace(playervsplayer_pos, button_size)
+    playervscomp = OptionSpace(playervscomp_pos, button_size)
+    compvscomp = OptionSpace(compvscomp_pos, button_size)
+    start_button = OptionSpace(start_pos, button_size)
     pvp_col = white
     pvb_col = white
     bvb_col = white
@@ -190,7 +191,7 @@ def game_start():
                 run = False
         keys_press = pygame.key.get_pressed()
         x_value, y_value = board_size_choice(keys_press, x_value, y_value)
-        size_text = f'Baord Size: X{x_value - x_value % 2:2}    Y{y_value - y_value % 2:2}'
+        size_text = f'Baord Size: X{x_value - x_value % 2:2}    Y{y_value - y_value % 2:2}    '
         if pygame.mouse.get_pressed(3)[0]:
             if playervsplayer.rect.collidepoint(pygame.mouse.get_pos()):
                 option = 1
@@ -205,12 +206,12 @@ def game_start():
         pygame.draw.rect(WIN, pvb_col, playervscomp.rect)
         pygame.draw.rect(WIN, bvb_col, compvscomp.rect)
         pygame.draw.rect(WIN, white, start_button.rect)
-        draw_text('player vs player', (playervsplayer_pos[0]+22, playervsplayer_pos[1]+15), font, black)
-        draw_text('player vs computer', (playervscomp_pos[0]+15, playervscomp_pos[1]+15), font, black)
-        draw_text('computer vs computer', (compvscomp_pos[0]+6, compvscomp_pos[1]+15), font, black)  # comp vs comp
-        draw_text('Start', (start_pos[0]+60, start_pos[1]+15), font, black)  # Start
-        draw_text('Othello', (title_pos[0]-70, title_pos[1]), title_font, black)  # title
-        draw_text(size_text, (width//2 - 80, 400), font, black)  # board size
+        draw_text('player vs player', (playervsplayer_pos[0], playervsplayer_pos[1]), font, black, button_size)  # PvP
+        draw_text('player vs computer', (playervscomp_pos[0], playervscomp_pos[1]), font, black, button_size)  # Pvcomp
+        draw_text('computer vs computer', (compvscomp_pos[0], compvscomp_pos[1]), font, black, button_size)  # compVcomp
+        draw_text('Start', (start_pos[0], start_pos[1]), font, black, button_size)  # Start
+        draw_text('Othello', (title_pos[0], title_pos[1]), title_font, black)  # title
+        draw_text(size_text, (width//2, 400), font, black)  # board size
         pygame.display.update()
     pygame.quit()
 
@@ -232,8 +233,8 @@ def game_end(board: Board):
     width, height = pygame.display.get_surface().get_size()
     draw_board(board)
     score, result = calculate_result(board)
-    draw_text(score, (width//2 - 150, (height)//2-30), title_font, black)
-    draw_text(result, (width//2 - 16*len(result)/2, height//2), title_font, black)
+    draw_text(score, (width//2, (height)//2-30), title_font, black)
+    draw_text(result, (width//2, height//2), title_font, black)
     pygame.display.update()
     run = True
     while run:
@@ -269,13 +270,14 @@ def display_game_information(board: Board, colour):
 
 
 def colour_choice():
+    button_size = (150, 40)
     WIN.fill(background)
-    first_col_choice = OptionSpace((120, 250), (60, 30))
-    second_col_choice = OptionSpace((420, 250), (60, 30))
+    first_col_choice = OptionSpace((start_width//4-button_size[0]//2, 250), button_size)
+    second_col_choice = OptionSpace((3*start_width//4-button_size[0]//2, 250), button_size)
     pygame.draw.rect(WIN, white, first_col_choice.rect)
     pygame.draw.rect(WIN, white, second_col_choice.rect)
-    draw_text('Black', (130, 257), font, black)
-    draw_text('White', (430, 257), font, black)
+    draw_text('Black', (start_width//4-button_size[0]//2, 250), font, black, button_size)
+    draw_text('White', (3*start_width//4-button_size[0]//2, 250), font, black, button_size)
     pygame.display.update()
     while True:
         for event in pygame.event.get():
@@ -288,9 +290,15 @@ def colour_choice():
                 return second_colour
 
 
-def draw_text(text, position, font_type, colour):
+def draw_text(text, position, font_type, colour, button_size=None):
     text_obj = font_type.render(text, True, colour)
-    WIN.blit(text_obj, position)
+    width, height = font_type.size(text)
+    pos_x = position[0]-width//2
+    pos_y = position[1]-height//2
+    if button_size is not None:
+        pos_x += button_size[0]//2
+        pos_y += button_size[1]//2
+    WIN.blit(text_obj, (pos_x, pos_y))
 
 
 if __name__ == '__main__':
