@@ -1,5 +1,5 @@
-from Othello_game.Othello_board import Board
-from Othello_game.Othello_consts import possible_value, first_colour, second_colour
+from Othello_board import Board
+from Othello_consts import possible_value, first_colour, second_colour
 
 
 class BOT:

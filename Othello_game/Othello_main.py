@@ -1,8 +1,8 @@
-from Othello_game.Othello_board import Board
-from Othello_game.Othello_bot import BOT
+from Othello_board import Board
+from Othello_bot import BOT
 from random import choice
-from Othello_game.Othello_consts import first_colour, second_colour, possible_value
-from Othello_game.Othello_interface import display_board, display_result, start_interface, players_choice
+from Othello_consts import first_colour, second_colour, possible_value
+from Othello_interface import display_board, display_result, start_interface, players_choice
 
 
 def main():

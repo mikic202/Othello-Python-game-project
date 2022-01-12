@@ -1,5 +1,5 @@
-from Othello_game.Othello_space import Space
-from Othello_game.Othello_consts import first_colour, second_colour, empty_value, possible_value, IncorectSizeError
+from Othello_space import Space
+from Othello_consts import first_colour, second_colour, empty_value, possible_value, IncorectSizeError
 
 
 class Board:

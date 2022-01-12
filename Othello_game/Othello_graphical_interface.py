@@ -1,11 +1,11 @@
 import pygame
-from Othello_game.Othello_board import Board
-from Othello_game.Othello_consts import possible_value, first_colour, second_colour
-from Othello_game.Othello_main import change_spaces
+from Othello_board import Board
+from Othello_consts import possible_value, first_colour, second_colour
+from Othello_main import change_spaces
 from random import choice
-from Othello_game.Othello_bot import BOT
+from Othello_bot import BOT
 import os
-from Othello_game.Othello_interface import calculate_result
+from Othello_interface import calculate_result
 start_width, start_height = 600, 600
 WIN = pygame.display.set_mode((start_width, start_height))
 pygame.display.set_caption("Othello")

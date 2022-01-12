@@ -1,6 +1,6 @@
-from Othello_game.Othello_io import write_board_to_file, write_result_to_file
-from Othello_game.Othello_board import Board, IncorectSizeError
-from Othello_game.Othello_consts import first_colour, second_colour, possible_value, TooManyIncorectTriesError
+from Othello_io import write_board_to_file, write_result_to_file
+from Othello_board import Board, IncorectSizeError
+from Othello_consts import first_colour, second_colour, possible_value, TooManyIncorectTriesError
 # import curses
 from tabulate import tabulate
 

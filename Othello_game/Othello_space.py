@@ -1,4 +1,4 @@
-from Othello_game.Othello_consts import (
+from Othello_consts import (
     first_colour, second_colour, possible_value, empty_value,
     IncorectSpacePositionError, IncorectSpaceValueError)
 

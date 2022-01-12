@@ -1,5 +1,5 @@
-from Othello_game.Othello_board import Board
-from Othello_game.Othello_consts import first_colour, second_colour
+from Othello_board import Board
+from Othello_consts import first_colour, second_colour
 
 
 def write_board_to_file(board_values, size, file_handle):
