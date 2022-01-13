@@ -1,6 +1,13 @@
-from Othello_consts import (
-    first_colour, second_colour, possible_value, empty_value,
-    IncorectSpacePositionError, IncorectSpaceValueError)
+from Othello_consts import first_colour, second_colour, possible_value, empty_value
+
+
+class IncorectSpaceValueError(ValueError):
+    pass
+
+
+class IncorectSpacePositionError(ValueError):
+    def __init__(self, axis) -> None:
+        super().__init__(f'Incorect position value on {axis} axis')
 
 
 class Space:

@@ -1,8 +1,12 @@
 from Othello_io import write_board_to_file, write_result_to_file
 from Othello_board import Board, IncorectSizeError
-from Othello_consts import first_colour, second_colour, possible_value, TooManyIncorectTriesError
+from Othello_consts import first_colour, second_colour, possible_value
 # import curses
 from tabulate import tabulate
+
+
+class TooManyIncorectTriesError(TypeError):
+    pass
 
 
 def start_interface():

@@ -1,5 +1,5 @@
-from Othello_game.Othello_board import Board
-from Othello_game.Othello_consts import IncorectSizeError, first_colour, second_colour, empty_value, possible_value
+from Othello_game.Othello_board import Board, IncorectSizeError
+from Othello_game.Othello_consts import first_colour, second_colour, empty_value, possible_value
 import pytest
 
 from Othello_game.Othello_space import Space
@@ -322,9 +322,9 @@ def test_check_line_for_series_of_spaces_function_two_p_in_line():
     black_space = Space((1, 2), first_colour, (4, 4))
     empty_space = Space((1, 3), empty_value, (4, 4))
     possible_space = Space((2, 3), possible_value, (4, 4))
-    line = [white_space, black_space, black_space, possible_space, black_space, possible_space, white_space, empty_space]
-    line = board._check_line_for_series_of_spaces(line, first_colour, second_colour, 3)
-    assert line == [0, None]
+    lin = [white_space, black_space, black_space, possible_space, black_space, possible_space, white_space, empty_space]
+    lin = board._check_line_for_series_of_spaces(lin, first_colour, second_colour, 3)
+    assert lin == [0, None]
 
 
 def test_find_plays_start():

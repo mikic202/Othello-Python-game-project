@@ -1,5 +1,10 @@
 from Othello_space import Space
-from Othello_consts import first_colour, second_colour, empty_value, possible_value, IncorectSizeError
+from Othello_consts import first_colour, second_colour, empty_value, possible_value
+
+
+class IncorectSizeError(ValueError):
+    def __init__(self, axis) -> None:
+        super().__init__(f'{axis} axis size has incorect value')
 
 
 class Board:

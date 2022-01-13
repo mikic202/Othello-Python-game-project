@@ -17,6 +17,22 @@ def test_count_spaces_played():
     assert bot._count_spaces_played(board) == 4
 
 
+def test_count_spaces_played_many_spaces():
+    board = Board((8, 8))
+    bot = BOT(board, first_colour)
+    board_values = [
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', 'b', '#', '#', '#', '#', '#',
+        '#', '#', 'b', 'w', '#', '#', '#', '#',
+        '#', '#', '#', 'w', 'b', 'b', 'b', '#',
+        '#', '#', 'w', 'b', 'w', 'w', '#', '#',
+        '#', '#', 'w', 'w', 'w', '#', 'b', '#',
+        '#', '#', 'w', 'b', 'b', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#']
+    board.set_board_values(board_values)
+    assert bot._count_spaces_played(board) == 18
+
+
 def test_evaluate_move():
     previous_board = Board((8, 8))
     board = Board((8, 8))

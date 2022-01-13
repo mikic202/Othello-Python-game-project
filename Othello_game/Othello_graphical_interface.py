@@ -309,8 +309,4 @@ def draw_text(text, position, font_type, colour, button_size=None):
 
 
 if __name__ == '__main__':
-    # display_game_information(Board((8, 8)))
     main_graphic()
-    # game_start()
-    # game_end(Board((8, 8)))
-    # colour_choice()

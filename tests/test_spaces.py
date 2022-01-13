@@ -1,5 +1,4 @@
-from Othello_game.Othello_space import Space
-from Othello_game.Othello_consts import IncorectSpacePositionError, IncorectSpaceValueError
+from Othello_game.Othello_space import Space, IncorectSpacePositionError, IncorectSpaceValueError
 from Othello_game.Othello_consts import first_colour, second_colour, empty_value, possible_value
 import pytest
 

@@ -1,5 +1,6 @@
 from Othello_game.Othello_board import Board
-from Othello_game.Othello_interface import TooManyIncorectTriesError, players_choice, start_interface, check_index, calculate_result
+from Othello_game.Othello_interface import TooManyIncorectTriesError, players_choice, start_interface
+from Othello_game.Othello_interface import check_index, calculate_result
 from io import StringIO
 import pytest
 
