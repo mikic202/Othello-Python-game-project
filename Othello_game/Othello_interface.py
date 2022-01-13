@@ -16,9 +16,7 @@ def start_interface():
     is_size_corect = False
     while not is_size_corect:
         try:
-            board_size_x = int(input('Chose even boards x dimensions between 8 and 30: '))
-            board_size_y = int(input('Chose even boards y dimensions between 8 and 30: '))
-            board = Board((board_size_x, board_size_y))
+            board = board_size_choice()
             is_size_corect = True
         except(IncorectSizeError) as er:
             print(er)
@@ -32,6 +30,12 @@ def start_interface():
             color = input(f'chose {first_colour} - black or {second_colour} - white colour: ')
     print('you can open Game_board.txt file to see the board')
     return int(game_type), board, color
+
+
+def board_size_choice():
+    board_size_x = int(input('Chose even boards x dimensions between 8 and 30: '))
+    board_size_y = int(input('Chose even boards y dimensions between 8 and 30: '))
+    return Board((board_size_x, board_size_y))
 
 
 def display_board(board_values, size):
