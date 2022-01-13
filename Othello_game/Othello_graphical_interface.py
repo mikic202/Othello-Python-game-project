@@ -5,6 +5,7 @@ from Othello_main import change_spaces
 from random import choice
 from Othello_bot import BOT
 import os
+import sys
 from Othello_interface import calculate_result
 start_width, start_height = 600, 600
 if __name__ == '__main__':
@@ -25,7 +26,7 @@ title_font = pygame.font.Font('freesansbold.ttf', 32)
 
 
 class SpaceToPress:
-    def __init__(self, position, space_size, space=None) -> None:
+    def __init__(self, position, space_size, space) -> None:
         self.space = space
         self.rect = pygame.Rect(position[0], position[1], space_size[0], space_size[1])
 
@@ -39,6 +40,7 @@ def check_quit():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
+            sys.exit()
 
 
 def main_graphic():
@@ -52,7 +54,7 @@ def main_graphic():
     pygame.quit()
 
 
-def change_colour(colour):
+def swap_colour(colour):
     if colour == first_colour:
         return second_colour
     else:
@@ -73,7 +75,7 @@ def main_game(first_function, second_function, board: Board):
             WIN.fill(black)
             line_dict, play_pos_dict = board.find_plays(colour)
             if possible_value not in board.board_values():
-                colour = change_colour(colour)
+                colour = swap_colour(colour)
                 line_dict, play_pos_dict = board.find_plays(colour)
                 if possible_value not in board.board_values():
                     break
@@ -112,7 +114,7 @@ def player_function(possible_spaces, line_dict, play_pos_dict, colour, board):
             chosen_space = posib_presed.space
             for line, space_num in zip(line_dict[chosen_space], play_pos_dict[chosen_space]):
                 change_spaces(colour, line, space_num)
-            return change_colour(colour), False
+            return swap_colour(colour), False
     return colour, True
 
 
@@ -128,7 +130,7 @@ def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
     for line, space_num in zip(line_dict[chosen_space], play_pos_dict[chosen_space]):
         change_spaces(colour, line, space_num)
     del bot
-    return change_colour(colour), False
+    return swap_colour(colour), False
 
 
 def draw_board(board: Board):
