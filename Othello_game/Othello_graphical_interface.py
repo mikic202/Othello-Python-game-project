@@ -39,21 +39,29 @@ class OptionSpace(SpaceToPress):
 def main_graphic():
     option, size = game_start()
     first_function, second_function = function_choice(option)
-    WIN = pygame.display.set_mode((start_width, start_height+30), pygame.RESIZABLE)
+    board = Board(size)
+    main_game(first_function, second_function, board)
+    pygame.time.wait(10)
+    pygame.display.update()
+    game_end(board)
+    pygame.quit()
+
+
+def change_colour(colour):
+    if colour == first_colour:
+        return second_colour
+    else:
+        return first_colour
+
+
+def main_game(first_function, second_function, board: Board):
+    WIN = pygame.display.set_mode((start_width, start_height+30))
     colour = first_colour
     run = True
     checked = False
     clock = pygame.time.Clock()
-    board = Board(size)
-    previous_win_size = pygame.display.get_surface().get_size()
     while run:
         clock.tick(fps)
-        if pygame.display.get_surface().get_size() != previous_win_size:
-            WIN.fill(black)
-            possible_spaces = draw_board(board)
-            display_game_information(board, colour)
-            pygame.display.update()
-            previous_win_size = pygame.display.get_surface().get_size()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -76,18 +84,6 @@ def main_graphic():
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board)
             pygame.time.wait(delay)
-    WIN = pygame.display.set_mode((start_width, start_height+30))
-    pygame.display.update()
-    pygame.time.wait(10)
-    game_end(board)
-    pygame.quit()
-
-
-def change_colour(colour):
-    if colour == first_colour:
-        return second_colour
-    else:
-        return first_colour
 
 
 def function_choice(option):
@@ -134,21 +130,27 @@ def draw_board(board: Board):
     width, height = pygame.display.get_surface().get_size()
     size_x, size_y = board.size()
     space_size = min(width//size_x, (height-30)//size_y)
-    circle_pos_x = (size_x//2-2, size_x//2+2)
-    circle_pos_y = (size_y//2-2, size_y//2+2)
     empty_space_trans = pygame.transform.scale(empty_space, (space_size, space_size))
     for pos_y in range(size_y):
         for pos_x in range(size_x):
             WIN.blit(empty_space_trans, (pos_x*space_size, pos_y*space_size))
-            if pos_x in circle_pos_x and pos_y in circle_pos_y:
-                pygame.draw.circle(WIN, black, (pos_x*space_size, pos_y*space_size), 2)
     possible_spaces = list()
     for space in board.board():
         value = set_values(space, space_size)
         if value is not None:
             possible_spaces.append(value)
+    draw_circle(board.size(), space_size)
     pygame.display.update()
     return possible_spaces
+
+
+def draw_circle(size, space_size):
+    size_x, size_y = size
+    circle_pos_x = (size_x//2-2, size_x//2+2)
+    circle_pos_y = (size_y//2-2, size_y//2+2)
+    for pos_x in circle_pos_x:
+        for pos_y in circle_pos_y:
+            pygame.draw.circle(WIN, black, (pos_x*space_size, pos_y*space_size), 2)
 
 
 def set_values(space, space_size):
