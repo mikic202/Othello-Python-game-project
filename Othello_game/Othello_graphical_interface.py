@@ -22,7 +22,6 @@ fps = 40
 menu_fps = 20
 font = pygame.font.Font('freesansbold.ttf', 13)
 title_font = pygame.font.Font('freesansbold.ttf', 32)
-delay = 250
 
 
 class SpaceToPress:
@@ -34,6 +33,12 @@ class SpaceToPress:
 class OptionSpace(SpaceToPress):
     def __init__(self, position, space_size) -> None:
         super().__init__(position, space_size, None)
+
+
+def check_quit():
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
 
 
 def main_graphic():
@@ -55,6 +60,7 @@ def change_colour(colour):
 
 
 def main_game(first_function, second_function, board: Board):
+    delay = 200
     WIN = pygame.display.set_mode((start_width, start_height+30))
     colour = first_colour
     run = True
@@ -62,9 +68,7 @@ def main_game(first_function, second_function, board: Board):
     clock = pygame.time.Clock()
     while run:
         clock.tick(fps)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+        check_quit()
         if not checked:
             WIN.fill(black)
             line_dict, play_pos_dict = board.find_plays(colour)
@@ -87,6 +91,7 @@ def main_game(first_function, second_function, board: Board):
 
 
 def function_choice(option):
+    delay = 200
     if option == 1:
         return player_function, player_function
     if option == 2:
@@ -134,13 +139,18 @@ def draw_board(board: Board):
     for pos_y in range(size_y):
         for pos_x in range(size_x):
             WIN.blit(empty_space_trans, (pos_x*space_size, pos_y*space_size))
+    possible_spaces = draw_space_values(board, space_size)
+    draw_circle(board.size(), space_size)
+    pygame.display.update()
+    return possible_spaces
+
+
+def draw_space_values(board: Board, space_size):
     possible_spaces = list()
     for space in board.board():
         value = set_values(space, space_size)
         if value is not None:
             possible_spaces.append(value)
-    draw_circle(board.size(), space_size)
-    pygame.display.update()
     return possible_spaces
 
 
@@ -189,9 +199,7 @@ def game_start():
         width, height = pygame.display.get_surface().get_size()
         clock.tick(menu_fps)
         WIN.fill(background)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+        check_quit()
         keys_press = pygame.key.get_pressed()
         x_value, y_value = board_size_choice(keys_press, x_value, y_value)
         size_text = f'Baord Size: X{x_value - x_value % 2:2}    Y{y_value - y_value % 2:2}    '
@@ -241,9 +249,7 @@ def game_end(board: Board):
     pygame.display.update()
     run = True
     while run:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
+        check_quit()
 
 
 def board_size_choice(keys_press, x_value, y_value):
@@ -283,9 +289,7 @@ def colour_choice():
     draw_text('White', (3*start_width//4-button_size[0]//2, 250), font, black, button_size)
     pygame.display.update()
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+        check_quit()
         if pygame.mouse.get_pressed(3)[0]:
             if first_col_choice.rect.collidepoint(pygame.mouse.get_pos()):
                 return first_colour
