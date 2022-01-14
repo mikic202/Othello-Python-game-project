@@ -10,6 +10,11 @@ class TooManyIncorectTriesError(TypeError):
 
 
 def start_interface():
+    """
+    function used at the start of the game
+    gives user choice of game mode board size
+    and if player vs computer function is chosen also gives colour choice
+    """
     possible_game_types = ['1', '2', '3']
     color = None
     print('Welcome to Othello\nChose game type\n')
@@ -37,12 +42,18 @@ def start_interface():
 
 
 def board_size_choice():
+    """
+    function that gives user choice of board size
+    """
     board_size_x = int(input('Chose even boards x dimensions between 8 and 30: '))
     board_size_y = int(input('Chose even boards y dimensions between 8 and 30: '))
     return Board((board_size_x, board_size_y))
 
 
 def display_board(board_values, size):
+    """
+    function that shows user curent board
+    """
     with open('Game_board.txt', 'w')as file_handle:
         write_board_to_file(board_values, size, file_handle)
         size_x, size_y = size
@@ -54,6 +65,9 @@ def display_board(board_values, size):
 
 
 def players_choice(max_index, color):
+    """
+    function that accepts index of space chosen by player
+    """
     max_tries = 5
     chosen_space = (input(f'{color} playing, chose spaces from {possible_value}1 to {possible_value}{max_index}: '))
     chosen_space = chosen_space.strip()
@@ -69,6 +83,9 @@ def players_choice(max_index, color):
 
 
 def display_result(board: Board):
+    """
+    function displays final board and results
+    """
     display_board(board.board_values(), board.size())
     with open('Game_board.txt', 'a')as file_handle:
         write_result_to_file(board, file_handle)
@@ -77,6 +94,9 @@ def display_result(board: Board):
 
 
 def calculate_result(board: Board):
+    """
+    function calculates result on given board
+    """
     black_spaces = white_spaces = 0
     for space in board.board_values():
         if space == first_colour:
@@ -94,6 +114,9 @@ def calculate_result(board: Board):
 
 
 def check_index(chosen, max_index):
+    """
+    function checks if index is in given range
+    """
     try:
         if int(chosen[1:]) > max_index:
             return True

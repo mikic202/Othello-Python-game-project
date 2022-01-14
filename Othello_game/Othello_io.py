@@ -3,6 +3,9 @@ from Othello_consts import first_colour, second_colour
 
 
 def write_board_to_file(board_values, size, file_handle):
+    """
+    function used to write curent board to file
+    """
     size_x, size_y = size
     for row in range(size_y):
         line = board_values[row*size_x:(row+1)*size_x]
@@ -10,6 +13,9 @@ def write_board_to_file(board_values, size, file_handle):
 
 
 def write_result_to_file(board: Board, file_handle):
+    """
+    function used to write final results to file
+    """
     white_spaces = 0
     black_spaces = 0
     for space in board.board_values():

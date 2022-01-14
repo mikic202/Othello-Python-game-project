@@ -25,18 +25,34 @@ font = pygame.font.Font('freesansbold.ttf', 13)
 title_font = pygame.font.Font('freesansbold.ttf', 32)
 
 
-class SpaceToPress:
-    def __init__(self, position, space_size, space) -> None:
-        self.space = space
+class OptionSpace:
+    """
+    class OptionSpace. Contains atributes:
+        :param rect: contains rectangel, created with given position and size, representing space on board
+        :type rect: Rect
+    """
+    def __init__(self, position, space_size) -> None:
         self.rect = pygame.Rect(position[0], position[1], space_size[0], space_size[1])
 
 
-class OptionSpace(SpaceToPress):
-    def __init__(self, position, space_size) -> None:
-        super().__init__(position, space_size, None)
+class SpaceToPress(OptionSpace):
+    """
+    class SpaceToPress inherits after OptionSpace. Contains atributes:
+        :param space: public parameter containing Space object
+        :type space: Space
+
+        :param rect: contains rectangel, created with given position and size, representing space on board
+        :type rect: Rect
+    """
+    def __init__(self, position, space_size, space) -> None:
+        super().__init__(position, space_size)
+        self.space = space
 
 
 def check_quit():
+    """
+    function 'watching' if the game was quited using x at upper right corner
+    """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -44,6 +60,9 @@ def check_quit():
 
 
 def main_graphic():
+    """
+    main function for game that uses graphical interface
+    """
     option, size = game_start()
     first_function, second_function = function_choice(option)
     board = Board(size)
@@ -55,6 +74,9 @@ def main_graphic():
 
 
 def swap_colour(colour):
+    """
+    function swaping colour to opposite one
+    """
     if colour == first_colour:
         return second_colour
     else:
@@ -62,6 +84,9 @@ def swap_colour(colour):
 
 
 def main_game(first_function, second_function, board: Board):
+    """
+    main function used for game
+    """
     delay = 200
     WIN = pygame.display.set_mode((start_width, start_height+30))
     colour = first_colour
@@ -93,6 +118,10 @@ def main_game(first_function, second_function, board: Board):
 
 
 def function_choice(option):
+    """
+    function that decides wchich functions will be used in main_game
+    based on users choice
+    """
     delay = 200
     if option == 1:
         return player_function, player_function
@@ -108,6 +137,10 @@ def function_choice(option):
 
 
 def player_function(possible_spaces, line_dict, play_pos_dict, colour, board):
+    """
+    function used when game is in player vs player or player vs computer mode
+    function takes user feedback and converts it into move on board
+    """
     chosen_space = None
     for posib_presed in possible_spaces:
         if posib_presed.rect.collidepoint(pygame.mouse.get_pos()):
@@ -119,6 +152,11 @@ def player_function(possible_spaces, line_dict, play_pos_dict, colour, board):
 
 
 def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
+    """
+    function used when game is in computer vs computer or player vs computer mode
+    function takes space chosen by computer based on its calculations and converts
+    that chosen space into move on board
+    """
     bot = BOT(board, colour)
     size_x, size_y = board.size()
     chosen_space = bot.chose_move(board)
@@ -134,6 +172,9 @@ def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
 
 
 def draw_board(board: Board):
+    """
+    function used to display board on screen
+    """
     width, height = pygame.display.get_surface().get_size()
     size_x, size_y = board.size()
     space_size = min(width//size_x, (height-30)//size_y)
@@ -148,6 +189,9 @@ def draw_board(board: Board):
 
 
 def draw_space_values(board: Board, space_size):
+    """
+    function used to display space that have value other than empty
+    """
     possible_spaces = list()
     for space in board.board():
         value = set_values(space, space_size)
@@ -157,6 +201,9 @@ def draw_space_values(board: Board, space_size):
 
 
 def draw_circle(size, space_size):
+    """
+    function draws four circles at the corners of squer created by sixteen central spaces
+    """
     size_x, size_y = size
     circle_pos_x = (size_x//2-2, size_x//2+2)
     circle_pos_y = (size_y//2-2, size_y//2+2)
@@ -166,6 +213,10 @@ def draw_circle(size, space_size):
 
 
 def set_values(space, space_size):
+    """
+    Displays individual space thats value is not empty
+    and if value is possible returns SpaceToPress object
+    """
     pos_x, pos_y = space.place_on_board()
     image_dict = {
         possible_value: os.path.join('Assets', 'Othello_space_possible.png'),
@@ -180,6 +231,9 @@ def set_values(space, space_size):
 
 
 def game_start():
+    """
+    Function that creates starting menu and monitors users choices
+    """
     x_value, y_value = (8, 8)
     clock = pygame.time.Clock()
     playervsplayer_pos = (30, 300)
@@ -230,6 +284,10 @@ def game_start():
 
 
 def button_colour_change(option):
+    """
+    function that changes colour of buttons depending on which is presed
+    if button is presed its colour changes to gray
+    """
     pvp_col = white
     pvb_col = white
     bvb_col = white
@@ -243,6 +301,9 @@ def button_colour_change(option):
 
 
 def game_end(board: Board):
+    """
+    game end menu
+    """
     width, height = pygame.display.get_surface().get_size()
     draw_board(board)
     score, result = calculate_result(board)
@@ -255,6 +316,10 @@ def game_end(board: Board):
 
 
 def board_size_choice(keys_press, x_value, y_value):
+    """
+    function that moitors user input and changes board size value depending on it
+    thanks to incrementing size by one start menu can operate in 20 fps while board size increments in 10 fps
+    """
     if keys_press[pygame.K_LEFT] and x_value > 8:
         x_value -= 1
     if keys_press[pygame.K_RIGHT] and x_value < 30:
@@ -267,6 +332,11 @@ def board_size_choice(keys_press, x_value, y_value):
 
 
 def display_game_information(board: Board, colour):
+    """
+    this function displays game information about curent game such as:
+        - colour playing
+        - amount of spaces on board of each colour
+    """
     width, height = pygame.display.get_surface().get_size()
     black_spac = 0
     white_spac = 0
@@ -281,6 +351,10 @@ def display_game_information(board: Board, colour):
 
 
 def colour_choice():
+    """
+    function that alows user to chose wchich colour he wants to play
+    usefull only in player vs computer mode
+    """
     button_size = (150, 40)
     WIN.fill(background)
     first_col_choice = OptionSpace((start_width//4-button_size[0]//2, 250), button_size)
@@ -300,6 +374,9 @@ def colour_choice():
 
 
 def draw_text(text, position, font_type, colour, button_size=None):
+    """
+    function that draws given text in given font and colour in given place on screen
+    """
     text_obj = font_type.render(text, True, colour)
     width, height = font_type.size(text)
     pos_x = position[0]-width//2

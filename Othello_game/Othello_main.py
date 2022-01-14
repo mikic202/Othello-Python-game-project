@@ -6,6 +6,9 @@ from Othello_interface import display_board, display_result, start_interface, pl
 
 
 def main():
+    """
+    main function used to play game
+    """
     chosen_game, board, colour = start_interface()
     if chosen_game == 1:
         pvp_board = board
@@ -31,6 +34,10 @@ def main():
 
 
 def play(board: Board, color, bot=None):
+    """
+    functions that controls chosen by him function
+    and players move
+    """
     board.reset_possible()
     line_dict, play_pos_dict = board.find_plays(color)
     space_to_board = dict()
@@ -48,7 +55,11 @@ def play(board: Board, color, bot=None):
     board.reset_possible()
 
 
-def change_spaces(playing, line, positions):
+def change_spaces(playing, line, positions: list):
+    """
+    function that changes spaces to playing colour in given line between
+    indexes given in position list
+    """
     if positions is None:
         return
     elif positions[0] is None:
@@ -66,6 +77,11 @@ def change_spaces(playing, line, positions):
 
 
 def computer_move(board: Board, color, bot):
+    """
+    function used when game is in computer vs computer or player vs computer mode
+    function takes space chosen by computer based on its calculations and converts
+    that chosen space into move on board
+    """
     size_x, size_y = board.size()
     line_dict, play_pos_dict = board.find_plays(color)
     values_board = format_board_file(board)
@@ -82,6 +98,10 @@ def computer_move(board: Board, color, bot):
 
 
 def format_board_file(board: Board):
+    """
+    function formats board values list so that there would be possible spaces with indexes
+    and values
+    """
     values_board = list()
     p_index = 1
     for space in board.board():
@@ -94,6 +114,9 @@ def format_board_file(board: Board):
 
 
 def main_user_vs_user(uvu_board: Board, first_function, second_function):
+    """
+    main function used for playing game with given functions
+    """
     is_game_ending = [False, False]
     comp1 = BOT(uvu_board, first_colour)
     comp2 = BOT(uvu_board, second_colour)
