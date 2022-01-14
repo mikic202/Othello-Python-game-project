@@ -60,6 +60,7 @@ def check_quit():
 
 
 def main_graphic():
+    pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'Icon.png')))
     """
     main function for game that uses graphical interface
     """
