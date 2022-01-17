@@ -68,20 +68,8 @@ def main_graphic():
     first_function, second_function = function_choice(option)
     board = Board(size)
     main_game(first_function, second_function, board)
-    pygame.time.wait(10)
-    pygame.display.update()
     game_end(board)
     pygame.quit()
-
-
-def swap_colour(colour):
-    """
-    function swaping colour to opposite one
-    """
-    if colour == first_colour:
-        return second_colour
-    else:
-        return first_colour
 
 
 def main_game(first_function, second_function, board: Board):
@@ -118,23 +106,47 @@ def main_game(first_function, second_function, board: Board):
             pygame.time.wait(delay)
 
 
-def function_choice(option):
+def swap_colour(colour):
     """
-    function that decides wchich functions will be used in main_game
-    based on users choice
+    function swaping colour to opposite one
     """
-    delay = 200
-    if option == 1:
-        return player_function, player_function
-    if option == 2:
-        colour_chosen = colour_choice()
-        pygame.time.wait(delay)
-        if colour_chosen == first_colour:
-            return player_function, computer_function
-        else:
-            return computer_function, player_function
-    if option == 3:
-        return computer_function, computer_function
+    if colour == first_colour:
+        return second_colour
+    else:
+        return first_colour
+
+
+def draw_text(text, position, font_type, colour, button_size=None):
+    """
+    function that draws given text in given font and colour in given place on screen
+    """
+    text_obj = font_type.render(text, True, colour)
+    width, height = font_type.size(text)
+    pos_x = position[0]-width//2
+    pos_y = position[1]-height//2
+    if button_size is not None:
+        pos_x += button_size[0]//2
+        pos_y += button_size[1]//2
+    WIN.blit(text_obj, (pos_x, pos_y))
+
+
+def display_game_information(board: Board, colour):
+    """
+    this function displays game information about curent game such as:
+        - colour playing
+        - amount of spaces on board of each colour
+    """
+    width, height = pygame.display.get_surface().get_size()
+    black_spac = 0
+    white_spac = 0
+    for value in board.board_values():
+        if value == first_colour:
+            black_spac += 1
+        elif value == second_colour:
+            white_spac += 1
+    playing = f'{"White" if colour == "w" else "Black"}'
+    text_scores = font.render(f'Playing: {playing} Scores: Black: {black_spac:3<}  White: {white_spac:3<}', True, white)
+    WIN.blit(text_scores, (0, height-20))
 
 
 def player_function(possible_spaces, line_dict, play_pos_dict, colour, board):
@@ -284,6 +296,64 @@ def game_start():
     pygame.quit()
 
 
+def function_choice(option):
+    """
+    function that decides wchich functions will be used in main_game
+    based on users choice
+    """
+    delay = 200
+    if option == 1:
+        return player_function, player_function
+    if option == 2:
+        colour_chosen = colour_choice()
+        pygame.time.wait(delay)
+        if colour_chosen == first_colour:
+            return player_function, computer_function
+        else:
+            return computer_function, player_function
+    if option == 3:
+        return computer_function, computer_function
+
+
+def colour_choice():
+    """
+    function that alows user to chose wchich colour he wants to play
+    usefull only in player vs computer mode
+    """
+    button_size = (150, 40)
+    WIN.fill(background)
+    first_col_choice = OptionSpace((start_width//4-button_size[0]//2, 250), button_size)
+    second_col_choice = OptionSpace((3*start_width//4-button_size[0]//2, 250), button_size)
+    pygame.draw.rect(WIN, white, first_col_choice.rect)
+    pygame.draw.rect(WIN, white, second_col_choice.rect)
+    draw_text('Black', (start_width//4-button_size[0]//2, 250), font, black, button_size)
+    draw_text('White', (3*start_width//4-button_size[0]//2, 250), font, black, button_size)
+    pygame.display.update()
+    while True:
+        check_quit()
+        if pygame.mouse.get_pressed(3)[0]:
+            if first_col_choice.rect.collidepoint(pygame.mouse.get_pos()):
+                return first_colour
+            elif second_col_choice.rect.collidepoint(pygame.mouse.get_pos()):
+                return second_colour
+
+
+def board_size_choice(keys_press, x_value, y_value):
+    """
+    function that moitors user input and changes board size value depending on it
+    thanks to incrementing size by one start menu can operate in 20 fps while board size increments in 10 fps
+    """
+    if keys_press[pygame.K_LEFT] and x_value > 8:
+        x_value -= 1
+    if keys_press[pygame.K_RIGHT] and x_value < 30:
+        x_value += 1
+    if keys_press[pygame.K_DOWN] and y_value > 8:
+        y_value -= 1
+    if keys_press[pygame.K_UP] and y_value < 30:
+        y_value += 1
+    return x_value, y_value
+
+
 def button_colour_change(option):
     """
     function that changes colour of buttons depending on which is presed
@@ -314,78 +384,6 @@ def game_end(board: Board):
     run = True
     while run:
         check_quit()
-
-
-def board_size_choice(keys_press, x_value, y_value):
-    """
-    function that moitors user input and changes board size value depending on it
-    thanks to incrementing size by one start menu can operate in 20 fps while board size increments in 10 fps
-    """
-    if keys_press[pygame.K_LEFT] and x_value > 8:
-        x_value -= 1
-    if keys_press[pygame.K_RIGHT] and x_value < 30:
-        x_value += 1
-    if keys_press[pygame.K_DOWN] and y_value > 8:
-        y_value -= 1
-    if keys_press[pygame.K_UP] and y_value < 30:
-        y_value += 1
-    return x_value, y_value
-
-
-def display_game_information(board: Board, colour):
-    """
-    this function displays game information about curent game such as:
-        - colour playing
-        - amount of spaces on board of each colour
-    """
-    width, height = pygame.display.get_surface().get_size()
-    black_spac = 0
-    white_spac = 0
-    for value in board.board_values():
-        if value == first_colour:
-            black_spac += 1
-        elif value == second_colour:
-            white_spac += 1
-    playing = f'{"White" if colour == "w" else "Black"}'
-    text_scores = font.render(f'Playing: {playing} Scores: Black: {black_spac:3<}  White: {white_spac:3<}', True, white)
-    WIN.blit(text_scores, (0, height-20))
-
-
-def colour_choice():
-    """
-    function that alows user to chose wchich colour he wants to play
-    usefull only in player vs computer mode
-    """
-    button_size = (150, 40)
-    WIN.fill(background)
-    first_col_choice = OptionSpace((start_width//4-button_size[0]//2, 250), button_size)
-    second_col_choice = OptionSpace((3*start_width//4-button_size[0]//2, 250), button_size)
-    pygame.draw.rect(WIN, white, first_col_choice.rect)
-    pygame.draw.rect(WIN, white, second_col_choice.rect)
-    draw_text('Black', (start_width//4-button_size[0]//2, 250), font, black, button_size)
-    draw_text('White', (3*start_width//4-button_size[0]//2, 250), font, black, button_size)
-    pygame.display.update()
-    while True:
-        check_quit()
-        if pygame.mouse.get_pressed(3)[0]:
-            if first_col_choice.rect.collidepoint(pygame.mouse.get_pos()):
-                return first_colour
-            elif second_col_choice.rect.collidepoint(pygame.mouse.get_pos()):
-                return second_colour
-
-
-def draw_text(text, position, font_type, colour, button_size=None):
-    """
-    function that draws given text in given font and colour in given place on screen
-    """
-    text_obj = font_type.render(text, True, colour)
-    width, height = font_type.size(text)
-    pos_x = position[0]-width//2
-    pos_y = position[1]-height//2
-    if button_size is not None:
-        pos_x += button_size[0]//2
-        pos_y += button_size[1]//2
-    WIN.blit(text_obj, (pos_x, pos_y))
 
 
 if __name__ == '__main__':
