@@ -12,7 +12,7 @@ class IncorectSpacePositionError(ValueError):
 
 class Space:
     """
-    class Space. Contains atributes:
+    class Space. Contains attributes:
         :param _place_on_board: spaces position x and y in board in range from 0 to board size - 1
         :type _place_on_board: tuple
 
@@ -36,14 +36,14 @@ class Space:
 
     def place_on_board(self):
         """
-        Returns spaces _place_on_board atribute in form of a tuple,
+        Returns spaces _place_on_board attribute in form of a tuple,
         that informs what is spaces place on board
         """
         return self._place_on_board
 
     def value(self):
         """
-        Returns _value atribute contained by space in form of a str
+        Returns _value attribute contained by space in form of a str
         """
         return self._value
 
@@ -55,7 +55,7 @@ class Space:
 
     def set_value(self, new_value):
         """
-        Changes _value atribute of Space to new_value given at the start of function
+        Changes _value attribute of Space to new_value given at the start of function
         """
         self._check_value(new_value)
         self._value = new_value
@@ -70,7 +70,7 @@ class Space:
 
     def _check_place_on_board(self, place, board_size):
         """
-        internal function used to check if any of spaces position in board isn't bigger than board dimensions
+        internal function used to check if all of spaces position in board aren't bigger than board dimensions - 1
         """
         place_x, place_y = place
         size_x, size_y = board_size
@@ -81,15 +81,15 @@ class Space:
 
     def space_around(self):
         """
-        Function returns _spaces_around atribute which is list of Space objects
+        Function returns _spaces_around attribute which is list of Space objects
         which are next to space on board
         """
         return self._spaces_around
 
     def find_space_around(self, list_of_spaces):
         """
-        Function reqires list of spaces that are in the board
-        asigns list of Space object that are next to space on board in form of a list
+        Function requires list of spaces that are in the board
+        assignes list of Space object that are next to space on board in form of a list
         and returns that list
         """
         place_x, place_y = self._place_on_board
@@ -202,7 +202,7 @@ class Space:
 
     def reset_if_possible(self):
         """
-        function that sets spaces _value atribute if _value is equal to possible_value
+        function that sets spaces _value attribute if _value is equal to possible_value
         """
         if self.value() == possible_value:
             self._value = empty_value
