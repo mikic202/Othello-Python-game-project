@@ -16,14 +16,14 @@ def test_function_choice_compvcomp():
 def test_function_choice_pvcomp_first_colour(monkeypatch):
     def fake_colour_choice():
         return first_colour
-    monkeypatch.setattr('game.Othello_graphical_interface.colour_choice', fake_colour_choice)
+    monkeypatch.setattr('Othello_game.Othello_graphical_interface.colour_choice', fake_colour_choice)
     assert function_choice(2) == (player_function, computer_function)
 
 
 def test_function_choice_pvcomp_second_colour(monkeypatch):
     def fake_colour_choice():
         return second_colour
-    monkeypatch.setattr('game.Othello_graphical_interface.colour_choice', fake_colour_choice)
+    monkeypatch.setattr('Othello_game.Othello_graphical_interface.colour_choice', fake_colour_choice)
     assert function_choice(2) == (computer_function, player_function)
 
 
