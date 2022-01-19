@@ -1,6 +1,6 @@
 import pygame
 from Othello_board import Board
-from Othello_consts import possible_value, first_colour, second_colour
+from Othello_consts import possible_value, first_colour, second_colour, swap_colour
 from Othello_main import change_spaces
 from random import choice
 from Othello_bot import BOT
@@ -106,16 +106,6 @@ def main_game(first_function, second_function, board: Board):
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp2)
             pygame.time.wait(delay)
-
-
-def swap_colour(colour):
-    """
-    function swaping colour to opposite one
-    """
-    if colour == first_colour:
-        return second_colour
-    else:
-        return first_colour
 
 
 def draw_text(text, position, font_type, colour, button_size=None):

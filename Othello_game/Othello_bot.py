@@ -1,5 +1,5 @@
 from Othello_board import Board
-from Othello_consts import possible_value, first_colour, second_colour
+from Othello_consts import possible_value, first_colour, second_colour, swap_colour
 
 
 class BOT:
@@ -88,9 +88,7 @@ class BOT:
         """
         min_space = None
         max_space = None
-        new_board = Board(board.size())
-        new_board.set_board_values(board.board_values())
-        new_board.reset_possible()
+        new_board = self._copy_board(board)
         new_board.find_plays(col)
         size_x, size_y = board.size()
         if depth == 0:
@@ -103,15 +101,13 @@ class BOT:
                 if space.value() == possible_value:
                     pos_x, pos_y = space.place_on_board()
                     space_position_in_list = pos_y*size_x + pos_x
-                    test_board = Board(board.size())
-                    test_board.set_board_values(new_board.board_values())
-                    test_board.reset_possible()
+                    test_board = self._copy_board(new_board)
                     line_plays, line_positions = test_board.find_plays(col)
                     space = test_board.board()[space_position_in_list]
                     for line, spcae_num in zip(line_plays[space], line_positions[space]):
                         self.change_spaces(col, line, spcae_num)
                     test_board.reset_possible()
-                    new_col = self._color_switch(col)
+                    new_col = swap_colour(col)
                     evaluated, scor = self._min_max_func(test_board, depth-1, max_move, min_move, False, new_col, space)
                     if max_eval < evaluated:
                         max_eval = evaluated
@@ -126,15 +122,13 @@ class BOT:
                 if space.value() == possible_value:
                     pos_x, pos_y = space.place_on_board()
                     space_position_in_list = pos_y*size_x + pos_x
-                    test_board = Board(board.size())
-                    test_board.set_board_values(board.board_values())
-                    test_board.reset_possible()
+                    test_board = self._copy_board(new_board)
                     line_plays, line_positions = test_board.find_plays(col)
                     space = test_board.board()[space_position_in_list]
                     for line, spcae_num in zip(line_plays[space], line_positions[space]):
                         self.change_spaces(col, line, spcae_num)
                     test_board.reset_possible()
-                    new_col = self._color_switch(col)
+                    new_col = swap_colour(col)
                     evaluated, scor = self._min_max_func(test_board, depth-1, max_move, min_move, True, new_col, space)
                     if min_eval > evaluated:
                         min_eval = evaluated
@@ -153,15 +147,6 @@ class BOT:
             if space.value() == first_colour or space.value() == second_colour:
                 played += 1
         return played
-
-    def _color_switch(self, color):
-        """
-        internal function that switches colour to opposite
-        """
-        if color == first_colour:
-            return second_colour
-        else:
-            return first_colour
 
     def change_spaces(self, playing, line, positions):
         """
@@ -183,3 +168,9 @@ class BOT:
             line_to_change = line[positions[0]:positions[1]+1]
             for space in line_to_change:
                 space.set_value(playing)
+
+    def _copy_board(self, board):
+        new_board = Board(board.size())
+        new_board.set_board_values(board.board_values())
+        new_board.reset_possible()
+        return new_board
