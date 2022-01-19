@@ -82,6 +82,8 @@ def main_game(first_function, second_function, board: Board):
     run = True
     checked = False
     clock = pygame.time.Clock()
+    comp1 = BOT(board, first_colour)
+    comp2 = BOT(board, second_colour)
     while run:
         clock.tick(fps)
         check_quit()
@@ -99,10 +101,10 @@ def main_game(first_function, second_function, board: Board):
             checked = True
         mouse_press = pygame.mouse.get_pressed(3)[0]
         if (mouse_press or first_function == computer_function) and colour == first_colour:
-            colour, checked = first_function(possible_spaces, line_dict, play_pos_dict, colour, board)
+            colour, checked = first_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp1)
             pygame.time.wait(delay)
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
-            colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board)
+            colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp2)
             pygame.time.wait(delay)
 
 
@@ -149,7 +151,7 @@ def display_game_information(board: Board, colour):
     WIN.blit(text_scores, (0, height-20))
 
 
-def player_function(possible_spaces, line_dict, play_pos_dict, colour, board):
+def player_function(possible_spaces, line_dict, play_pos_dict, colour, board=None, bot=None):
     """
     function used when game is in player vs player or player vs computer mode
     function takes user feedback and converts it into move on board
@@ -164,13 +166,12 @@ def player_function(possible_spaces, line_dict, play_pos_dict, colour, board):
     return colour, True
 
 
-def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
+def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board, bot):
     """
     function used when game is in computer vs computer or player vs computer mode
     function takes space chosen by computer based on its calculations and converts
     that chosen space into move on board
     """
-    bot = BOT(board, colour)
     size_x, size_y = board.size()
     chosen_space = bot.chose_move(board)
     if chosen_space is None:
@@ -180,7 +181,6 @@ def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board):
     chosen_space = board.board()[space_position_in_list]
     for line, space_num in zip(line_dict[chosen_space], play_pos_dict[chosen_space]):
         change_spaces(colour, line, space_num)
-    del bot
     return swap_colour(colour), False
 
 
