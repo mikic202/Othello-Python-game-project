@@ -64,12 +64,12 @@ def main_graphic():
     """
     main function for game that uses graphical interface
     """
-    option, size = game_start()
-    first_function, second_function = function_choice(option)
-    board = Board(size)
-    main_game(first_function, second_function, board)
-    game_end(board)
-    pygame.quit()
+    while True:
+        option, size = game_start()
+        first_function, second_function = function_choice(option)
+        board = Board(size)
+        main_game(first_function, second_function, board)
+        game_end(board)
 
 
 def main_game(first_function, second_function, board: Board):
@@ -276,12 +276,12 @@ def game_start():
         pygame.draw.rect(WIN, pvb_col, playervscomp.rect)
         pygame.draw.rect(WIN, bvb_col, compvscomp.rect)
         pygame.draw.rect(WIN, white, start_button.rect)
-        draw_text('player vs player', (playervsplayer_pos[0], playervsplayer_pos[1]), font, black, button_size)  # PvP
-        draw_text('player vs computer', (playervscomp_pos[0], playervscomp_pos[1]), font, black, button_size)  # Pvcomp
-        draw_text('computer vs computer', (compvscomp_pos[0], compvscomp_pos[1]), font, black, button_size)  # compVcomp
-        draw_text('Start', (start_pos[0], start_pos[1]), font, black, button_size)  # Start
-        draw_text('Othello', (title_pos[0], title_pos[1]), title_font, black)  # title
-        draw_text(size_text, (width//2, 400), font, black)  # board size
+        draw_text('player vs player', (playervsplayer_pos[0], playervsplayer_pos[1]), font, black, button_size)
+        draw_text('player vs computer', (playervscomp_pos[0], playervscomp_pos[1]), font, black, button_size)
+        draw_text('computer vs computer', (compvscomp_pos[0], compvscomp_pos[1]), font, black, button_size)
+        draw_text('Start', (start_pos[0], start_pos[1]), font, black, button_size)
+        draw_text('Othello', (title_pos[0], title_pos[1]), title_font, black)
+        draw_text(size_text, (width//2, 400), font, black)
         pygame.display.update()
     pygame.quit()
 
@@ -370,10 +370,16 @@ def game_end(board: Board):
     score, result = calculate_result(board)
     draw_text(score, (width//2, (height)//2-30), title_font, black)
     draw_text(result, (width//2, height//2), title_font, black)
-    pygame.display.update()
+    new_game = OptionSpace((width//2-50, height-30), (100, 30))
     run = True
+    pygame.draw.rect(WIN, white, new_game.rect)
+    draw_text('New Game', (width//2-50, (height)-30), font, black, (100, 30))
+    pygame.display.update()
     while run:
         check_quit()
+        if pygame.mouse.get_pressed(3)[0]:
+            if new_game.rect.collidepoint(pygame.mouse.get_pos()):
+                break
 
 
 if __name__ == '__main__':
