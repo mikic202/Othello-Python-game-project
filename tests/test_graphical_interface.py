@@ -1,6 +1,7 @@
 from Othello_game.Othello_graphical_interface import function_choice, player_function, computer_function
-from Othello_game.Othello_graphical_interface import button_colour_change
+from Othello_game.Othello_graphical_interface import button_colour_change, OptionSpace, SpaceToPress
 from Othello_game.Othello_graphical_interface import white, gray, board_size_choice
+from Othello_game.Othello_space import Space
 from Othello_game.Othello_consts import first_colour, second_colour
 import pygame
 
@@ -77,3 +78,17 @@ def test_board_size_choice_key_right_typical():
 def test_board_size_choice_key_tight_out_of_range():
     key_press = {pygame.K_UP: False, pygame.K_DOWN: False, pygame.K_LEFT: False, pygame.K_RIGHT: True}
     assert board_size_choice(key_press, 30, 8) == (30, 8)
+
+
+def test_option_space_init():
+    option = OptionSpace((100, 100), (200, 200))
+    rect = option.rect
+    assert type(rect) == pygame.Rect
+    assert rect.x, rect.y == (100, 100)
+    assert rect.size == (200, 200)
+
+
+def test_space_to_press_init():
+    space = Space((3, 3), first_colour, (8, 8))
+    space_to_press = SpaceToPress((100, 100), (200, 200), space)
+    assert space_to_press.space == space
