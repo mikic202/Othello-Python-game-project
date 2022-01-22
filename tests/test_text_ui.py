@@ -1,5 +1,5 @@
 from Othello_game.Othello_board import Board
-from Othello_game.Othello_main import change_spaces, format_board_file, play, computer_move
+from Othello_game.Othello_text_ui import change_spaces, format_board_file, play, computer_move
 from Othello_game.Othello_bot import BOT
 from Othello_game.Othello_consts import first_colour, empty_value
 from io import StringIO

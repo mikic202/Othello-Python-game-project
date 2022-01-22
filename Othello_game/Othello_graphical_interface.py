@@ -1,7 +1,7 @@
 import pygame
 from Othello_board import Board
 from Othello_consts import possible_value, first_colour, second_colour, swap_colour
-from Othello_main import change_spaces
+from Othello_text_ui import change_spaces
 from random import choice
 from Othello_bot import BOT
 import os
@@ -15,7 +15,7 @@ pygame.display.set_caption("Othello")
 pygame.init()
 white = (255, 255, 255)
 black = (0, 0, 0)
-background = (84, 166, 92)
+background = (89, 156, 104)
 gray = (60, 60, 60)
 blue = (53, 168, 230)
 empty_space = pygame.image.load(os.path.join('Assets', 'Othello_space.png'))
