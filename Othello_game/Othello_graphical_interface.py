@@ -101,10 +101,12 @@ def main_game(first_function, second_function, board: Board):
         mouse_press = pygame.mouse.get_pressed(3)[0]
         if (mouse_press or first_function == computer_function) and colour == first_colour:
             colour, checked = first_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp1)
-            chose_delay(first_function)
+            pygame.time.wait(chose_delay(first_function))
+            print('b')
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp2)
-            chose_delay(second_function)
+            pygame.time.wait(chose_delay(second_function))
+            print('a')
 
 
 def draw_text(text, position, font_type, colour, button_size=None):
@@ -141,9 +143,12 @@ def display_game_information(board: Board, colour):
 
 
 def chose_delay(function):
-    delay = 200
+    """
+    function used for changing delay 200 ms when player plays and 1 ms when computer plays
+    """
     if function == player_function:
-        pygame.time.wait(delay)
+        return 200
+    return 1
 
 
 def player_function(possible_spaces, line_dict, play_pos_dict, colour, board=None, bot=None):
