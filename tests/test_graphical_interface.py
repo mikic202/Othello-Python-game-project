@@ -1,6 +1,6 @@
 from Othello_game.Othello_graphical_interface import function_choice, player_function, computer_function
 from Othello_game.Othello_graphical_interface import button_colour_change, OptionSpace, SpaceToPress
-from Othello_game.Othello_graphical_interface import white, gray, board_size_choice
+from Othello_game.Othello_graphical_interface import white, gray, board_size_choice, chose_delay
 from Othello_game.Othello_space import Space
 from Othello_game.Othello_consts import first_colour, second_colour
 import pygame
@@ -83,7 +83,7 @@ def test_board_size_choice_key_tight_out_of_range():
 def test_option_space_init():
     option = OptionSpace((100, 100), (200, 200))
     rect = option.rect
-    assert type(rect) == pygame.Rect
+    assert isinstance(rect, pygame.Rect)
     assert rect.x, rect.y == (100, 100)
     assert rect.size == (200, 200)
 
@@ -92,3 +92,13 @@ def test_space_to_press_init():
     space = Space((3, 3), first_colour, (8, 8))
     space_to_press = SpaceToPress((100, 100), (200, 200), space)
     assert space_to_press.space == space
+
+
+def test_chose_delay_player():
+    delay = chose_delay(player_function)
+    assert delay == 200
+
+
+def test_chose_delay_computer():
+    delay = chose_delay(computer_function)
+    assert delay == 1

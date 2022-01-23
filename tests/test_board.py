@@ -20,6 +20,12 @@ def test_board_init():
     assert board.size() == (8, 8)
 
 
+def test_board_init_max_size():
+    board = Board((30, 30))
+    assert board.size() == (30, 30)
+    assert len(board.board()) == 900
+
+
 def test_board_init_too_small_size():
     with pytest.raises(IncorectSizeError):
         Board((3, 3))
@@ -201,6 +207,42 @@ def test_diagonal_line_positive_function_upper_left_corner():
     assert values == expected
 
 
+def test_diagonal_line_positive_function_lower_right_corner():
+    board = Board((8, 8))
+    fake_board = [
+        'w', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', 'w', '#', '#', '#', '#',
+        '#', '#', '#', 'w', 'b', 'b', 'b', '#',
+        '#', '#', 'w', 'b', 'w', 'w', '#', '#',
+        '#', '#', '#', 'w', 'w', '#', '#', '#',
+        '#', '#', '#', '#', 'b', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', 'b']
+    board.set_board_values(fake_board)
+    expected = ['b']
+    line = board._diagonal_line_positive(63)
+    values = [space.value() for space in line]
+    assert values == expected
+
+
+def test_diagonal_line_positive_function_botom_right_half():
+    board = Board((8, 8))
+    fake_board = [
+        'w', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', 'w', '#', '#', '#', '#',
+        '#', '#', '#', 'w', 'b', 'b', 'b', '#',
+        '#', '#', 'w', 'b', 'w', 'w', '#', '#',
+        '#', '#', '#', 'w', 'w', '#', '#', '#',
+        '#', '#', '#', '#', 'b', 'b', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', 'b']
+    board.set_board_values(fake_board)
+    expected = ['#', '#', 'b', '#']
+    line = board._diagonal_line_positive(53)
+    values = [space.value() for space in line]
+    assert values == expected
+
+
 def test_diagonal_line_negative_function():
     board = Board((8, 8))
     fake_board = [
@@ -215,6 +257,24 @@ def test_diagonal_line_negative_function():
     board.set_board_values(fake_board)
     expected = ['#', '#', 'w', 'w', 'b', '#']
     line = board._diagonal_line_negative(34)
+    values = [space.value() for space in line]
+    assert values == expected
+
+
+def test_diagonal_line_negative_function_upper_right_half():
+    board = Board((8, 8))
+    fake_board = [
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#',
+        '#', '#', '#', 'w', '#', '#', '#', '#',
+        '#', '#', '#', 'w', 'b', 'b', 'b', '#',
+        '#', '#', 'w', 'b', 'w', 'w', '#', '#',
+        '#', '#', '#', 'w', 'w', '#', '#', '#',
+        '#', '#', '#', '#', 'b', '#', '#', '#',
+        '#', '#', '#', '#', '#', '#', '#', '#']
+    board.set_board_values(fake_board)
+    expected = ['#', '#', '#', 'b', '#']
+    line = board._diagonal_line_negative(21)
     values = [space.value() for space in line]
     assert values == expected
 
