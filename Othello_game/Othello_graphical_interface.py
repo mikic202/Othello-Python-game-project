@@ -76,7 +76,6 @@ def main_game(first_function, second_function, board: Board):
     """
     main function used for game
     """
-    delay = 200
     WIN = pygame.display.set_mode((start_width, start_height+30))
     colour = first_colour
     run = True
@@ -102,10 +101,10 @@ def main_game(first_function, second_function, board: Board):
         mouse_press = pygame.mouse.get_pressed(3)[0]
         if (mouse_press or first_function == computer_function) and colour == first_colour:
             colour, checked = first_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp1)
-            pygame.time.wait(delay)
+            chose_delay(first_function)
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp2)
-            pygame.time.wait(delay)
+            chose_delay(second_function)
 
 
 def draw_text(text, position, font_type, colour, button_size=None):
@@ -139,6 +138,12 @@ def display_game_information(board: Board, colour):
     playing = f'{"White" if colour == "w" else "Black"}'
     text_scores = font.render(f'Playing: {playing} Scores: Black: {black_spac:3<}  White: {white_spac:3<}', True, white)
     WIN.blit(text_scores, (0, height-20))
+
+
+def chose_delay(function):
+    delay = 200
+    if function == player_function:
+        pygame.time.wait(delay)
 
 
 def player_function(possible_spaces, line_dict, play_pos_dict, colour, board=None, bot=None):
