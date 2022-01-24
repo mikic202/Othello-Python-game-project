@@ -289,4 +289,7 @@ class Board:
             space.reset_if_possible()
 
     def _check_if_all_plays_None(self, plays_list):
+        """
+        function checks if all elements of the list are None
+        """
         return all(play is None for play in plays_list)
