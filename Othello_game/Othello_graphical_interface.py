@@ -51,7 +51,7 @@ class SpaceToPress(OptionSpace):
 
 def check_quit():
     """
-    function 'watching' if the game was quited using x at upper right corner
+    function 'watching' if the game was quited using x in the upper right corner
     """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -102,11 +102,9 @@ def main_game(first_function, second_function, board: Board):
         if (mouse_press or first_function == computer_function) and colour == first_colour:
             colour, checked = first_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp1)
             pygame.time.wait(chose_delay(first_function))
-            print('b')
         elif (mouse_press or second_function == computer_function) and colour == second_colour:
             colour, checked = second_function(possible_spaces, line_dict, play_pos_dict, colour, board, comp2)
             pygame.time.wait(chose_delay(second_function))
-            print('a')
 
 
 def draw_text(text, position, font_type, colour, button_size=None):
@@ -144,7 +142,7 @@ def display_game_information(board: Board, colour):
 
 def chose_delay(function):
     """
-    function used for changing delay 200 ms when player plays and 1 ms when computer plays
+    function used for changing delay, 200 ms when player plays and 1 ms when computer plays
     """
     if function == player_function:
         return 200
@@ -154,7 +152,7 @@ def chose_delay(function):
 def player_function(possible_spaces, line_dict, play_pos_dict, colour, board=None, bot=None):
     """
     function used when game is in player vs player or player vs computer mode
-    function takes user feedback and converts it into move on board
+    function takes users inputs and converts it into move on board
     """
     chosen_space = None
     for posib_presed in possible_spaces:
@@ -186,7 +184,7 @@ def computer_function(possible_spaces, line_dict, play_pos_dict, colour, board, 
 
 def draw_board(board: Board):
     """
-    function used to display board on screen
+    function used for displaying board on screen
     """
     width, height = pygame.display.get_surface().get_size()
     size_x, size_y = board.size()
@@ -203,7 +201,7 @@ def draw_board(board: Board):
 
 def draw_space_values(board: Board, space_size):
     """
-    function used to display space that have value other than empty
+    function used for displaying space that have value other than empty
     """
     possible_spaces = list()
     for space in board.board():
@@ -298,7 +296,7 @@ def game_start():
 
 def function_choice(option):
     """
-    function that decides wchich functions will be used in main_game
+    function that decides which functions will be used in main_game
     based on users choice
     """
     delay = 200
@@ -341,7 +339,7 @@ def colour_choice():
 def board_size_choice(keys_press, x_value, y_value):
     """
     function that moitors user input and changes board size value depending on it
-    thanks to incrementing size by one start menu can operate in 20 fps while board size increments in 10 fps
+    thanks to incrementing size by one start menu can operate at 20 fps while board size increments at 10 fps
     """
     if keys_press[pygame.K_LEFT] and x_value > 8:
         x_value -= 1
