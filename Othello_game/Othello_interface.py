@@ -11,7 +11,7 @@ class TooManyIncorectTriesError(TypeError):
 def start_interface():
     """
     function used at the start of the game
-    gives user choice of game mode board size
+    gives user choice of gamemode board size
     and if player vs computer function is chosen also gives colour choice
     """
     possible_game_types = ['1', '2', '3']
@@ -51,7 +51,7 @@ def board_size_choice():
 
 def display_board(board_values, size):
     """
-    function that shows user curent board
+    function that shows user curent board and saves it to the Game_board.txt file
     """
     with open('Game_board.txt', 'w')as file_handle:
         write_board_to_file(board_values, size, file_handle)

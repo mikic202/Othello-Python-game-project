@@ -84,7 +84,7 @@ class BOT:
 
     def _min_max_func(self, board: Board, depth, max_move, min_move, is_maximasing, col, space_played):
         """
-        internal function used for minmax algoritm with alfa beta pruning
+        internal function used for minmax algorithm with alfa beta pruning
         """
         min_space = None
         max_space = None
@@ -140,7 +140,7 @@ class BOT:
 
     def _count_spaces_played(self, board: Board):
         """
-        returns amount of spaces that already have pices on them
+        returns amount of spaces that already have pieces on them
         """
         played = 0
         for space in board.board():
@@ -151,7 +151,7 @@ class BOT:
     def change_spaces(self, playing, line, positions):
         """
         Function that changes spaces that sholuld be changed in result of playing space
-        Same function as in main.py but couldn't be imported from that file dou to circular
+        Same function as in main.py but couldn't be imported from that file due to circular
         character of import
         """
         if positions is None:
@@ -170,6 +170,9 @@ class BOT:
                 space.set_value(playing)
 
     def _copy_board(self, board):
+        """
+        internal function returning Board object identical to inputed board, but not the same adress
+        """
         new_board = Board(board.size())
         new_board.set_board_values(board.board_values())
         new_board.reset_possible()

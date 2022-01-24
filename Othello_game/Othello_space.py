@@ -26,7 +26,7 @@ class Space:
         :type _spaces_around: list of Space
     """
     def __init__(self, place_on_board: tuple, value: str, board_size: tuple) -> None:
-        # place_on_board is in range o 0 to board_size-1
+        # place_on_board is in range from 0 to board_size-1
         self._check_place_on_board(place_on_board, board_size)
         self._place_on_board = place_on_board
         self._check_value(value)

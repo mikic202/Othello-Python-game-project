@@ -65,7 +65,7 @@ class Board:
 
     def _size_check(self, size):
         """
-        internal function that checks if size is odd and brtween 8 and 30
+        internal function that checks if size is even and between 8 and 30
         """
         size_x, size_y = size
         if size_x < 8 or size_x > 30 or size_x % 2 != 0:
@@ -87,7 +87,7 @@ class Board:
 
     def _assign_starting_point(self, size):
         """
-        internal function that assigns four starting pices
+        internal function that assigns four starting pieces
         """
         size_x, size_y = size
         self._board[size_x*int(size_y/2-1)+size_x//2-1].set_value(second_colour)
@@ -97,8 +97,8 @@ class Board:
 
     def _find_possible_spaces(self, playing):
         """
-        internal function that checks if there is pices of another colour around
-        studied pice
+        internal function that checks if there is pieces of another colour around
+        studied piece
         """
         if playing == first_colour:
             looking = second_colour
@@ -114,7 +114,7 @@ class Board:
 
     def find_plays(self, playing):
         """
-        function that looks for spaces wher piece of colour that is playing can be put
+        function that looks for spaces where piece of colour that is playing can be put
         """
         self._find_possible_spaces(playing)
         possible_plays = dict()
@@ -226,7 +226,7 @@ class Board:
 
     def _check_diagonal(self, space_list):
         """
-        internal function that checks if there are spaces in list which one of positions is
+        internal function that checks if there are spaces in list which one of the positions is
         different from correct ones by over one
         """
         final_line = None
@@ -242,7 +242,7 @@ class Board:
 
     def _check_line_for_series_of_spaces(self, line, looking, playing, p_pos):
         """
-        internal function that serches for plays that will change at least one pice
+        internal function that searches for plays that will change at least one peice
         """
         line = self._split_line(line, p_pos)
         result = list()
@@ -267,7 +267,7 @@ class Board:
 
     def _split_line(self, line, p_position):
         """
-        internal function that splits line into two pices,
+        internal function that splits line into two parts,
         without p_position element
         """
         return line[:p_position], line[p_position+1:]
@@ -283,7 +283,7 @@ class Board:
 
     def reset_possible(self):
         """
-        function that resets all spaces which have possible value yo empty value
+        function that resets all spaces which have possible value to empty value
         """
         for space in self._board:
             space.reset_if_possible()

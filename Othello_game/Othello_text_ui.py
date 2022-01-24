@@ -7,7 +7,7 @@ from Othello_interface import display_board, display_result, start_interface, pl
 
 def main():
     """
-    main function used to play game
+    main function used to play game using text ui
     """
     chosen_game, board, colour = start_interface()
     if chosen_game == 1:
@@ -35,8 +35,8 @@ def main():
 
 def play(board: Board, color, bot=None):
     """
-    functions that controls chosen by him function
-    and players move
+    functions that controls chosen by player move and displays board before and after
+    player has chosen move
     """
     board.reset_possible()
     line_dict, play_pos_dict = board.find_plays(color)
