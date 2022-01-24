@@ -79,7 +79,8 @@ class BOT:
         Function that returns space tahat was chosen by the algoritm
         as the one with the best outcome out of possible spaces
         """
-        best_eval, space = self._min_max_func(board, 3, -float('inf'), float('inf'), True, self.colour(), None)
+        depth = 3
+        best_eval, space = self._min_max_func(board, depth, -float('inf'), float('inf'), True, self.colour(), None)
         return space
 
     def _min_max_func(self, board: Board, depth, max_move, min_move, is_maximasing, col, space_played):
