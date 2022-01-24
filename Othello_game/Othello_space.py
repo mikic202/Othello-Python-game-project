@@ -66,7 +66,7 @@ class Space:
         """
         possible_values = [first_colour, second_colour, empty_value, possible_value]
         if value not in possible_values:
-            raise IncorectSpaceValueError
+            raise IncorectSpaceValueError()
 
     def _check_place_on_board(self, place, board_size):
         """
