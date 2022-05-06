@@ -1,5 +1,5 @@
 from Othello_space import Space
-from Othello_consts import first_colour, second_colour, empty_value, possible_value
+from Othello_consts import first_colour, second_colour, empty_value, possible_value, swap_colour
 
 
 class IncorectSizeError(ValueError):
@@ -30,7 +30,7 @@ class Board:
 
     def size(self):
         """
-        Returns size of board in form of a tuple
+        Returns property of board in form of a tuple
         """
         return self._size
 
@@ -78,7 +78,6 @@ class Board:
         internal functino that creates starting board
         """
         size_x, size_y = size
-        board = list()
         board = [Space((index_x, index_y), empty_value, size)for index_y in range(size_y) for index_x in range(size_x)]
         for space in board:
             space.find_space_around(board)
@@ -109,6 +108,7 @@ class Board:
             for suraunding in space.space_around():
                 if suraunding.value() == looking:
                     if_possible = True
+                    break
             if if_possible and space.value() == empty_value:
                 space.set_value(possible_value)
 
@@ -119,10 +119,7 @@ class Board:
         self._find_possible_spaces(playing)
         possible_plays = dict()
         space_line_plays = dict()
-        if playing == first_colour:
-            looking = second_colour
-        else:
-            looking = first_colour
+        looking = swap_colour(playing)
         for space in self._board:
             if space.value() == possible_value:
                 possible_plays[space] = []
