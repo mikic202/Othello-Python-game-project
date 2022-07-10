@@ -19,8 +19,6 @@ blue = (53, 168, 230)
 
 pygame.init()
 empty_space = pygame.image.load(os.path.join('Assets', 'Othello_space.png'))
-font = pygame.font.Font('freesansbold.ttf', 13)
-title_font = pygame.font.Font('freesansbold.ttf', 32)
 
 
 class OptionSpace:
@@ -50,6 +48,8 @@ class SpaceToPress(OptionSpace):
 class Window:
     def __init__(self) -> None:
         self._WIN = pygame.display.set_mode((start_width, start_height))
+        self._font = pygame.font.Font('freesansbold.ttf', 13)
+        self._title_font = pygame.font.Font('freesansbold.ttf', 32)
         pygame.init()
 
     def check_quit(self):
@@ -71,7 +71,7 @@ class Window:
             pos_y += button_size[1]//2
         self._WIN.blit(text_obj, (pos_x, pos_y))
 
-    def main_graphic(self):
+    def play(self):
         pygame.display.set_icon(pygame.image.load(os.path.join('Assets', 'Othello_icon.png')))
         """
         main function for game that uses graphical interface
@@ -132,7 +132,7 @@ class Window:
             elif value == second_colour:
                 white_spac += 1
         playing = f'{"White" if colour == "w" else "Black"}'
-        text_scores = font.render(f'Playing: {playing} Scores: Black: {black_spac:3<}  White: {white_spac:3<}', True, white)
+        text_scores = self._font.render(f'Playing: {playing} Scores: Black: {black_spac:3<}  White: {white_spac:3<}', True, white)
         self._WIN.blit(text_scores, (0, height-20))
 
     def chose_delay(self, function):
@@ -272,12 +272,12 @@ class Window:
             pygame.draw.rect(self._WIN, pvb_col, playervscomp.rect)
             pygame.draw.rect(self._WIN, bvb_col, compvscomp.rect)
             pygame.draw.rect(self._WIN, white, start_button.rect)
-            self.draw_text('player vs player', (playervsplayer_pos[0], playervsplayer_pos[1]), font, black, button_size)
-            self.draw_text('player vs computer', (playervscomp_pos[0], playervscomp_pos[1]), font, black, button_size)
-            self.draw_text('computer vs computer', (compvscomp_pos[0], compvscomp_pos[1]), font, black, button_size)
-            self.draw_text('Start', (start_pos[0], start_pos[1]), font, black, button_size)
-            self.draw_text('Othello', (title_pos[0], title_pos[1]), title_font, black)
-            self.draw_text(size_text, (width//2, 400), font, black)
+            self.draw_text('player vs player', (playervsplayer_pos[0], playervsplayer_pos[1]), self._font, black, button_size)
+            self.draw_text('player vs computer', (playervscomp_pos[0], playervscomp_pos[1]), self._font, black, button_size)
+            self.draw_text('computer vs computer', (compvscomp_pos[0], compvscomp_pos[1]), self._font, black, button_size)
+            self.draw_text('Start', (start_pos[0], start_pos[1]), self._font, black, button_size)
+            self.draw_text('Othello', (title_pos[0], title_pos[1]), self._title_font, black)
+            self.draw_text(size_text, (width//2, 400), self._font, black)
             pygame.display.update()
         pygame.quit()
 
@@ -310,8 +310,8 @@ class Window:
         second_col_choice = OptionSpace((3*start_width//4-button_size[0]//2, 250), button_size)
         pygame.draw.rect(self._WIN, white, first_col_choice.rect)
         pygame.draw.rect(self._WIN, white, second_col_choice.rect)
-        self.draw_text('Black', (start_width//4-button_size[0]//2, 250), font, black, button_size)
-        self.draw_text('White', (3*start_width//4-button_size[0]//2, 250), font, black, button_size)
+        self.draw_text('Black', (start_width//4-button_size[0]//2, 250), self._font, black, button_size)
+        self.draw_text('White', (3*start_width//4-button_size[0]//2, 250), self._font, black, button_size)
         pygame.display.update()
         while True:
             self.check_quit()
@@ -359,12 +359,12 @@ class Window:
         width, height = pygame.display.get_surface().get_size()
         self.draw_board(board)
         score, result = calculate_result(board)
-        self.draw_text(score, (width//2, (height)//2-30), title_font, black)
-        self.draw_text(result, (width//2, height//2), title_font, black)
+        self.draw_text(score, (width//2, (height)//2-30), self._title_font, black)
+        self.draw_text(result, (width//2, height//2), self._title_font, black)
         new_game = OptionSpace((width//2-50, height-30), (100, 30))
         run = True
         pygame.draw.rect(self._WIN, white, new_game.rect)
-        self.draw_text('New Game', (width//2-50, (height)-30), font, black, (100, 30))
+        self.draw_text('New Game', (width//2-50, (height)-30), self._font, black, (100, 30))
         pygame.display.update()
         while run:
             self.check_quit()
@@ -375,4 +375,4 @@ class Window:
 
 if __name__ == "__main__":
     window = Window()
-    window.main_graphic()
+    window.play()
