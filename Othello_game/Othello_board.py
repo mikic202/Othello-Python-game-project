@@ -122,6 +122,9 @@ class Board:
         looking = swap_colour(playing)
         for space in self._board:
             if space.value() == possible_value:
+                if space.place_on_board() == (1, 8):
+                    print("a")
+
                 possible_plays[space] = []
                 index_x, index_y = space.place_on_board()
                 place_in_list = (index_y)*self._size_x + index_x
@@ -179,7 +182,7 @@ class Board:
             diagonal_above = diagonal_above[1:]
         diagonal_belov = part_belov[::self._size_x-1]
         diagonal_line = diagonal_above + diagonal_belov
-        if self._size_y-space_pos_in_list % self._size_x < space_pos_in_list // self._size_x + 1:
+        if self._size_y-space_pos_in_list % self._size_x <= space_pos_in_list // self._size_x + 1:
             diagonal_line.reverse()
             checked = self._check_diagonal(diagonal_line)
             checked.reverse()
@@ -199,7 +202,7 @@ class Board:
         diagonal_belov = part_belov[::self._size_x+1]
         diagonal_belov = diagonal_belov[1:]
         diagonal_line = diagonal_above + diagonal_belov
-        if space_pos_in_list % self._size_x > space_pos_in_list // self._size_x + 1:
+        if space_pos_in_list % self._size_x >= space_pos_in_list // self._size_x + 1:
             checked = self._check_diagonal(diagonal_line)
             return checked
         diagonal_line.reverse()
