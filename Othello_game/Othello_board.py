@@ -182,12 +182,7 @@ class Board:
             diagonal_above = diagonal_above[1:]
         diagonal_belov = part_belov[::self._size_x-1]
         diagonal_line = diagonal_above + diagonal_belov
-        if self._size_y-space_pos_in_list % self._size_x <= space_pos_in_list // self._size_x + 1:
-            diagonal_line.reverse()
-            checked = self._check_diagonal(diagonal_line, self._board[space_pos_in_list])
-            checked.reverse()
-            return checked
-        return self._check_diagonal(diagonal_line, self._board[space_pos_in_list])
+        return self._check_diagonal_positive(diagonal_line, self._board[space_pos_in_list])
 
     def _diagonal_line_negative(self, space_pos_in_list):
         """
@@ -202,12 +197,7 @@ class Board:
         diagonal_belov = part_belov[::self._size_x+1]
         diagonal_belov = diagonal_belov[1:]
         diagonal_line = diagonal_above + diagonal_belov
-        if space_pos_in_list % self._size_x >= space_pos_in_list // self._size_x + 1:
-            checked = self._check_diagonal(diagonal_line, self._board[space_pos_in_list])
-            return checked
-        diagonal_line.reverse()
-        final_line = self._check_diagonal(diagonal_line, self._board[space_pos_in_list])
-        final_line.reverse()
+        final_line = self._check_diagonal_negative(diagonal_line, self._board[space_pos_in_list])
         return final_line
 
     def _vertical_line(self, row_num):
@@ -224,32 +214,66 @@ class Board:
         """
         return self._board[line_num*self._size_x:(line_num+1)*self._size_x]
 
-    def _check_diagonal(self, space_list: list, space_checked):
+    def _check_diagonal_negative(self, space_list: list, space_checked):
         """
         internal function that checks if there are spaces in list which one of the positions is
         different from correct ones by over one
         """
-
+        space_list.reverse()
         space_index_in_diag = space_list.index(space_checked)
-
         final_line = [space_checked]
-
-        can_add_to_diag = [True, True]
-
+        can_be_longer = [True, True]
         spaces_away_from_checked = 1
-
-        while(can_add_to_diag[0] or can_add_to_diag[1]):
-            if(can_add_to_diag[0] and space_index_in_diag - spaces_away_from_checked >= 0) and (space_list[space_index_in_diag - spaces_away_from_checked].place_on_board()[0] - space_list[space_index_in_diag - spaces_away_from_checked + 1].place_on_board()[0])**2 == 1 and (space_list[space_index_in_diag - spaces_away_from_checked].place_on_board()[1] - space_list[space_index_in_diag - spaces_away_from_checked + 1].place_on_board()[1])**2 == 1:
-                final_line = [space_list[space_index_in_diag - spaces_away_from_checked]] + final_line
-            elif(can_add_to_diag[0]):
-                can_add_to_diag[0] = False
-
-            if(can_add_to_diag[1] and space_index_in_diag + spaces_away_from_checked <= len(space_list) - 1) and (space_list[space_index_in_diag + spaces_away_from_checked].place_on_board()[0] - space_list[space_index_in_diag + spaces_away_from_checked - 1].place_on_board()[0])**2 == 1 and (space_list[space_index_in_diag + spaces_away_from_checked].place_on_board()[1] - space_list[space_index_in_diag + spaces_away_from_checked - 1].place_on_board()[1])**2 == 1:
-                final_line = final_line + [space_list[space_index_in_diag + spaces_away_from_checked]]
-            elif(can_add_to_diag[1]):
-                can_add_to_diag[1] = False
+        while( can_be_longer[1] or can_be_longer[0]):
+            if can_be_longer[0] and space_index_in_diag - spaces_away_from_checked >= 0:
+                next_space = space_list[space_index_in_diag - spaces_away_from_checked]
+                if next_space.place_on_board()[0] != 0 and next_space.place_on_board()[1] != 0:
+                    final_line = [next_space] + final_line
+                else:
+                    can_be_longer[0] = False
+            else:
+                can_be_longer[0] = False
+            if can_be_longer[1] and space_index_in_diag + spaces_away_from_checked <= len(space_list) - 1:
+                next_space = space_list[space_index_in_diag + spaces_away_from_checked]
+                if next_space.place_on_board()[0] != self._size[0]-1 and next_space.place_on_board()[1] != self._size[0]-1 :
+                    final_line.append(next_space)
+                else:
+                    can_be_longer[1] = False
+            else:
+                can_be_longer[1] = False
             spaces_away_from_checked += 1
+        final_line.reverse()
+        return final_line
 
+    def _check_diagonal_positive(self, space_list: list, space_checked):
+        """
+        internal function that checks if there are spaces in list which one of the positions is
+        different from correct ones by over one
+        """
+        space_list.reverse()
+        space_index_in_diag = space_list.index(space_checked)
+        final_line = [space_checked]
+        can_be_longer = [True, True]
+        spaces_away_from_checked = 1
+        while(can_be_longer[1] or can_be_longer[0]):
+
+            if can_be_longer[0] and space_index_in_diag - spaces_away_from_checked >= 0:
+                next_space = space_list[space_index_in_diag - spaces_away_from_checked]
+                if next_space.place_on_board()[0] != self._size[0]-1 and next_space.place_on_board()[1] != 0:
+                    final_line = [next_space] + final_line
+                else:
+                    can_be_longer[0] = False
+            else:
+                can_be_longer[0] = False
+            if can_be_longer[1] and space_index_in_diag + spaces_away_from_checked <= len(space_list) - 1:
+                next_space = space_list[space_index_in_diag + spaces_away_from_checked]
+                if next_space.place_on_board()[0] != 0 and next_space.place_on_board()[1] != self._size[0]-1 :
+                    final_line.append(next_space)
+                else:
+                    can_be_longer[1] = False
+            else:
+                can_be_longer[1] = False
+            spaces_away_from_checked += 1
         # condition = 1
         # for index in range(len(space_list)):
         #     if index != 0:
@@ -258,7 +282,9 @@ class Board:
         #         final_line = space_list[:index]
         # if final_line is None:
         #     final_line = space_list
+        final_line.reverse()
         return final_line
+
 
     def _check_line_for_series_of_spaces(self, line, looking, playing, p_pos):
         """
