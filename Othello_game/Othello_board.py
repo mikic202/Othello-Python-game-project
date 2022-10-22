@@ -224,7 +224,7 @@ class Board:
         final_line = [space_checked]
         can_be_longer = [True, True]
         spaces_away_from_checked = 1
-        while( can_be_longer[1] or can_be_longer[0]):
+        while can_be_longer[1] or can_be_longer[0]:
             if can_be_longer[0] and space_index_in_diag - spaces_away_from_checked >= 0:
                 next_space = space_list[space_index_in_diag - spaces_away_from_checked]
                 if next_space.place_on_board()[0] != 0 and next_space.place_on_board()[1] != 0:
@@ -235,7 +235,7 @@ class Board:
                 can_be_longer[0] = False
             if can_be_longer[1] and space_index_in_diag + spaces_away_from_checked <= len(space_list) - 1:
                 next_space = space_list[space_index_in_diag + spaces_away_from_checked]
-                if next_space.place_on_board()[0] != self._size[0]-1 and next_space.place_on_board()[1] != self._size[0]-1 :
+                if next_space.place_on_board()[0] != self._size[0]-1 and next_space.place_on_board()[1] != self._size[0]-1:
                     final_line.append(next_space)
                 else:
                     can_be_longer[1] = False
@@ -255,7 +255,7 @@ class Board:
         final_line = [space_checked]
         can_be_longer = [True, True]
         spaces_away_from_checked = 1
-        while(can_be_longer[1] or can_be_longer[0]):
+        while can_be_longer[1] or can_be_longer[0]:
 
             if can_be_longer[0] and space_index_in_diag - spaces_away_from_checked >= 0:
                 next_space = space_list[space_index_in_diag - spaces_away_from_checked]
@@ -267,24 +267,15 @@ class Board:
                 can_be_longer[0] = False
             if can_be_longer[1] and space_index_in_diag + spaces_away_from_checked <= len(space_list) - 1:
                 next_space = space_list[space_index_in_diag + spaces_away_from_checked]
-                if next_space.place_on_board()[0] != 0 and next_space.place_on_board()[1] != self._size[0]-1 :
+                if next_space.place_on_board()[0] != 0 and next_space.place_on_board()[1] != self._size[0]-1:
                     final_line.append(next_space)
                 else:
                     can_be_longer[1] = False
             else:
                 can_be_longer[1] = False
             spaces_away_from_checked += 1
-        # condition = 1
-        # for index in range(len(space_list)):
-        #     if index != 0:
-        #         condition = space_list[index].place_on_board()[0] - space_list[index-1].place_on_board()[0]
-        #     if (condition != 1 and condition != -1) and final_line is None:
-        #         final_line = space_list[:index]
-        # if final_line is None:
-        #     final_line = space_list
         final_line.reverse()
         return final_line
-
 
     def _check_line_for_series_of_spaces(self, line, looking, playing, p_pos):
         """
