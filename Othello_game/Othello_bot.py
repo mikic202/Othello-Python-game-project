@@ -1,4 +1,7 @@
+from typing import List
+
 from Othello_board import Board
+from Othello_space import Space
 from Othello_consts import possible_value, first_colour, second_colour, swap_colour
 
 
@@ -14,7 +17,7 @@ class BOT:
             param _weights: cotains information about weights of algoritm
             type _weights: list
     """
-    def __init__(self, board: Board, colour) -> None:
+    def __init__(self, board: Board, colour: str) -> None:
         self._colour = colour
         self._board = board
         if colour == first_colour:
@@ -22,25 +25,25 @@ class BOT:
         elif colour == second_colour:
             self._weights = [-2, 0, 2, 3, 2, 3, 2]
 
-    def board(self):
+    def board(self) -> Board:
         """
         Returns _board param
         """
         return self._board
 
-    def colour(self):
+    def colour(self) -> str:
         """
         Returns _colour param
         """
         return self._colour
 
-    def weights(self):
+    def weights(self) -> List[int]:
         """
         returns _weights param
         """
         return self._weights
 
-    def evaluate_move(self, board):
+    def evaluate_move(self, board: Board) -> int:
         """
         function evaluating moves based on starting board,
         inputed board and weights
@@ -74,7 +77,7 @@ class BOT:
                     play_value += self._weights[6]
         return play_value
 
-    def chose_move(self, board):
+    def chose_move(self, board: Board) -> Space:
         """
         Function that returns space tahat was chosen by the algoritm
         as the one with the best outcome out of possible spaces
@@ -83,7 +86,7 @@ class BOT:
         best_eval, space = self._min_max_func(board, depth, -float('inf'), float('inf'), True, self.colour(), None)
         return space
 
-    def _min_max_func(self, board: Board, depth, max_move, min_move, is_maximasing, col, space_played):
+    def _min_max_func(self, board: Board, depth: int, max_move: float, min_move: float, is_maximasing: bool, col: str, space_played):
         """
         internal function used for minmax algorithm with alfa beta pruning
         """
@@ -139,7 +142,7 @@ class BOT:
                         break
             return min_eval, min_space
 
-    def _count_spaces_played(self, board: Board):
+    def _count_spaces_played(self, board: Board) -> int:
         """
         returns amount of spaces that already have pieces on them
         """
@@ -149,7 +152,7 @@ class BOT:
                 played += 1
         return played
 
-    def change_spaces(self, playing, line, positions):
+    def change_spaces(self, playing: str, line: List[Space], positions):
         """
         Function that changes spaces that sholuld be changed in result of playing space
         Same function as in main.py but couldn't be imported from that file due to circular
@@ -170,7 +173,7 @@ class BOT:
             for space in line_to_change:
                 space.set_value(playing)
 
-    def _copy_board(self, board):
+    def _copy_board(self, board: Board) -> Board:
         """
         internal function returning Board object identical to inputed board, but not the same adress
         """
