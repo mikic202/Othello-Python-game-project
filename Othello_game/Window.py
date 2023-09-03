@@ -49,7 +49,11 @@ class Window:
     def __init__(self) -> None:
         self._WIN = pygame.display.set_mode((start_width, start_height))
         self._font = pygame.font.Font('freesansbold.ttf', 13)
-        self._title_font = pygame.font.Font('freesansbold.ttf', 32)
+        self._title_font = pygame.font.Font('freesansbold.ttf', 42)
+        self._keys_pressed = {pygame.K_LEFT: False,
+                              pygame.K_RIGHT: False,
+                              pygame.K_DOWN: False,
+                              pygame.K_UP: False}
         pygame.init()
 
     def check_quit(self):
@@ -326,14 +330,27 @@ class Window:
         function that moitors user input and changes board size value depending on it
         thanks to incrementing size by one start menu can operate at 20 fps while board size increments at 10 fps
         """
-        if keys_press[pygame.K_LEFT] and x_value > 8:
-            x_value -= 1
-        if keys_press[pygame.K_RIGHT] and x_value < 30:
-            x_value += 1
-        if keys_press[pygame.K_DOWN] and y_value > 8:
-            y_value -= 1
-        if keys_press[pygame.K_UP] and y_value < 30:
-            y_value += 1
+        if keys_press[pygame.K_LEFT] and not self._keys_pressed[pygame.K_LEFT] and x_value >= 10:
+            self._keys_pressed[pygame.K_LEFT] = True
+            x_value -= 2
+        elif not keys_press[pygame.K_LEFT] and self._keys_pressed[pygame.K_LEFT]:
+            self._keys_pressed[pygame.K_LEFT] = False
+        if keys_press[pygame.K_RIGHT] and not self._keys_pressed[pygame.K_RIGHT] and x_value < 30:
+            self._keys_pressed[pygame.K_RIGHT] = True
+            x_value += 2
+        elif not keys_press[pygame.K_RIGHT] and self._keys_pressed[pygame.K_RIGHT]:
+            self._keys_pressed[pygame.K_RIGHT] = False
+
+        if keys_press[pygame.K_DOWN] and not self._keys_pressed[pygame.K_DOWN] and y_value >= 10:
+            self._keys_pressed[pygame.K_DOWN] = True
+            y_value -= 2
+        elif not keys_press[pygame.K_DOWN] and self._keys_pressed[pygame.K_DOWN]:
+            self._keys_pressed[pygame.K_DOWN] = False
+        if keys_press[pygame.K_UP] and not self._keys_pressed[pygame.K_UP] and y_value < 30:
+            self._keys_pressed[pygame.K_UP] = True
+            y_value += 2
+        elif not keys_press[pygame.K_UP] and self._keys_pressed[pygame.K_UP]:
+            self._keys_pressed[pygame.K_UP] = False
         return x_value, y_value
 
     def button_colour_change(self, option):
